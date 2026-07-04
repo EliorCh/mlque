@@ -50,6 +50,7 @@
   .formula-line { direction: ltr; unicode-bidi: isolate; text-align: center; font-family: 'Cambria Math', serif; font-size: 10.5px; background: #f4f2ec; border-radius: 4px; padding: 2px 4px; margin: 2px 0; break-inside: avoid; }
   table { border-collapse: collapse; width: 100%; margin: 3px 0 4px; break-inside: avoid; font-size: 9.5px; }
   th, td { border: 0.5px solid #bbb; padding: 1.5px 3px; text-align: center; }
+  td.num { direction: ltr; unicode-bidi: isolate; }
   th { background: #efece3; font-weight: 700; }
   .ztable td, .ztable th { direction: ltr; font-family: 'Cambria Math', serif; }
   .trap { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 5px; padding: 3px 6px; margin: 3px 0; break-inside: avoid; }
@@ -201,18 +202,18 @@
   </ol></div>
   <ul>
     <li><b>דוגמה מלאה (חזרה ב-3 מבחנים):</b> N(70,10), מתחת ל-50 או מעל 85: Φ(−2) + [1−Φ(1.5)] = 0.0228 + 0.0668 = <b>0.0896 ≈ 9%</b></li>
-    <li><b>טווח סימטרי של X%:</b> <span class="f">z = Z(0.5 + X/2)</span> <bdi dir="ltr">←</bdi> <span class="f">μ ± z·σ</span>. דוגמה 80%: Z(0.90)=1.28 ← N(70,10) נותן <b>[57.2, 82.8]</b></li>
+    <li><b>טווח סימטרי של X%:</b> <span class="f">z = Z(0.5 + X/2)</span> <bdi dir="ltr">←</bdi> <span class="f">μ ± z·σ</span>. דוגמה 80%: Z(0.90)=1.28 ← N(70,10) נותן <b><bdi dir="ltr">[57.2, 82.8]</bdi></b></li>
     <li><b>טווח לא סימטרי:</b> מפרקים לצדדים: Y% משמאל ל-μ ← גבול שמאלי ב-Z(0.5−Y); X% מימין ← Z(0.5+X). חלוקת X=Y+5 מתוך 85% ← Y=40, X=45. <b>בדיוק 50% מצד אחד ← הגבול ∞ (כל הזנב)!</b></li>
-    <li><b>כלל אמפירי:</b> ±σ ≈ 68% · ±2σ ≈ 95% (בסטנדרטית: [−1.96, 1.96]) · ±3σ ≈ 99.7%</li>
+    <li><b>כלל אמפירי:</b> ±σ ≈ 68% · ±2σ ≈ 95% (בסטנדרטית: <bdi dir="ltr">[−1.96, 1.96]</bdi>) · ±3σ ≈ 99.7%</li>
     <li><b>סטנדרטית:</b> μ=0, σ=1 ← שונות = סטיית תקן = 1 (מתלכדות). התלכדות ממוצע=חציון=שכיח — בכל נורמלית.</li>
   </ul>
   <h3>דוגמאות תקנון מלאות (N(70,10))</h3>
   <table>
     <tr><th>שאלה</th><th>תקנון</th><th>טבלה</th><th>תשובה</th></tr>
-    <tr><td class="ltr">P(x&lt;50)</td><td class="ltr">z=−2</td><td class="ltr">Φ(−2)</td><td class="ltr">0.0228</td></tr>
-    <tr><td class="ltr">P(x&gt;85)</td><td class="ltr">z=1.5</td><td class="ltr">1−Φ(1.5)</td><td class="ltr">0.0668</td></tr>
-    <tr><td class="ltr">P(60&lt;x&lt;80)</td><td class="ltr">z=∓1</td><td class="ltr">Φ(1)−Φ(−1)</td><td class="ltr">0.6826</td></tr>
-    <tr><td>מרכזי 80%</td><td class="ltr">z=1.28</td><td class="ltr">70±1.28·10</td><td class="ltr">[57.2, 82.8]</td></tr>
+    <tr><td><bdi dir="ltr">P(x&lt;50)</bdi></td><td><bdi dir="ltr">z=−2</bdi></td><td><bdi dir="ltr">Φ(−2)</bdi></td><td><bdi dir="ltr">0.0228</bdi></td></tr>
+    <tr><td><bdi dir="ltr">P(x&gt;85)</bdi></td><td><bdi dir="ltr">z=1.5</bdi></td><td><bdi dir="ltr">1−Φ(1.5)</bdi></td><td><bdi dir="ltr">0.0668</bdi></td></tr>
+    <tr><td><bdi dir="ltr">P(60&lt;x&lt;80)</bdi></td><td><bdi dir="ltr">z=∓1</bdi></td><td><bdi dir="ltr">Φ(1)−Φ(−1)</bdi></td><td><bdi dir="ltr">0.6826</bdi></td></tr>
+    <tr><td>מרכזי 80%</td><td><bdi dir="ltr">z=1.28</bdi></td><td><bdi dir="ltr">70±1.28·10</bdi></td><td><bdi dir="ltr">[57.2, 82.8]</bdi></td></tr>
   </table>
   <div class="trap"><b>מלכודות נורמלית:</b> ① "גדול מ" ← 1−Φ. ② z שלילי ← Φ(−z)=1−Φ(z). ③ בדיוק חצי מצד אחד ← הגבול ∞. ④ התלכדות מדדים ≠ נורמליות.</div>
   <table class="ztable">
@@ -252,7 +253,7 @@
   </div>
   <div class="recipe"><span class="rt">מתכון "[left, right] של X% מהשטח" (חזר 8+ פעמים!):</span>
   <ol>
-    <li>סימטרי: <span class="f">z = Z(0.5 + X/2)</span> <bdi dir="ltr">←</bdi> <span class="f">left = μ − z·σ, right = μ + z·σ</span>. דוגמה N(70,10), 80%: z=1.28 ← [57.2, 82.8].</li>
+    <li>סימטרי: <span class="f">z = Z(0.5 + X/2)</span> <bdi dir="ltr">←</bdi> <span class="f">left = μ − z·σ, right = μ + z·σ</span>. דוגמה N(70,10), 80%: z=1.28 ← <bdi dir="ltr">[57.2, 82.8]</bdi>.</li>
     <li>לא-סימטרי (Y% משמאל, X% מימין): גבול שמאלי ב-<span class="f">μ − Z(0.5−Y)·σ</span>, ימני ב-<span class="f">μ + Z(0.5+X)·σ בהתאמה</span>. <b>צד עם 50% ← ∞.</b></li>
   </ol></div>
   <div class="recipe"><span class="rt">מתכון חישוב CI (4 שלבים — להראות הכל!):</span>
@@ -262,7 +263,7 @@
     <li>מרווח: <span class="f">Z·s/√n</span></li>
     <li>תשובה: <span class="f">[x̄ − מרווח, x̄ + מרווח]</span></li>
   </ol>
-  <p><b>מחושב:</b> שונות 2.5, n=100, x̄=500.8, ביטחון 99%: s=1.58 ← מרווח 2.58·1.58/10 = 0.41 ← <b>[500.39, 501.21]</b></p></div>
+  <p><b>מחושב:</b> שונות 2.5, n=100, x̄=500.8, ביטחון 99%: s=1.58 ← מרווח 2.58·1.58/10 = 0.41 ← <b><bdi dir="ltr">[500.39, 501.21]</bdi></b></p></div>
   <div class="recipe"><span class="rt">מתכון גודל מדגם (אורך נדרש L):</span>
   <ol>
     <li><span class="f">√n = 2·Z·s/L</span> ← מעלים בריבוע</li>
@@ -355,13 +356,13 @@
   <h3>קודים מוכרים (הפלט מאומת בהרצה)</h3>
   <table>
     <tr><th>קוד</th><th>מה עושה</th><th>פלט</th></tr>
-    <tr><td class="ltr">set(...)+count&gt;1</td><td>ערכים חוזרים בלבד</td><td class="ltr">[1,2,5,9]</td></tr>
+    <tr><td><bdi dir="ltr">set(...)+count&gt;1</bdi></td><td>ערכים חוזרים בלבד</td><td><bdi dir="ltr">[1,2,5,9]</bdi></td></tr>
     <tr><td>ראשוניים 2..19 (מסכה)</td><td>סכום</td><td><b>77</b></td></tr>
     <tr><td>פלינדרום (בניית הפוך)</td><td>757 / 756</td><td>True / False</td></tr>
-    <tr><td class="ltr">reversed + zip</td><td>צופן מראה a↔z</td><td>a→z, b→y</td></tr>
-    <tr><td class="ltr">LCM (while)</td><td class="ltr">lcm(7,6)</td><td><b>42</b></td></tr>
-    <tr><td class="ltr">len(set(s))/len(s)</td><td>גיוון לקסיקלי</td><td class="ltr">16/19</td></tr>
-    <tr><td class="ltr">sorted(key=d.get)</td><td>תו שכיח</td><td>'e'</td></tr>
+    <tr><td><bdi dir="ltr">reversed + zip</bdi></td><td>צופן מראה a↔z</td><td>a→z, b→y</td></tr>
+    <tr><td><bdi dir="ltr">LCM (while)</bdi></td><td><bdi dir="ltr">lcm(7,6)</bdi></td><td><b>42</b></td></tr>
+    <tr><td><bdi dir="ltr">len(set(s))/len(s)</bdi></td><td>גיוון לקסיקלי</td><td><bdi dir="ltr">16/19</bdi></td></tr>
+    <tr><td><bdi dir="ltr">sorted(key=d.get)</bdi></td><td>תו שכיח</td><td>'e'</td></tr>
   </table>
   <div class="recipe"><span class="rt">מתכון "מה מבצעת התוכנית (במשפט אחד)":</span>
   <ol>
@@ -385,10 +386,10 @@
   </ul>
   <table>
     <tr><th>חלופה ל-MSE</th><th>תקין?</th><th>למה</th></tr>
-    <tr><td class="ltr">|Δ| (MAE)</td><td>✓</td><td>חיובי, מעניש כל שגיאה</td></tr>
-    <tr><td class="ltr">Δ⁴</td><td>✓</td><td>זוגי, רגיש לחריגים</td></tr>
-    <tr><td class="ltr">Δ³</td><td>✗</td><td>סימנים מתקזזים</td></tr>
-    <tr><td class="ltr">Δ^(−2)</td><td>✗</td><td>מתגמל שגיאות ענק</td></tr>
+    <tr><td><bdi dir="ltr">|Δ| (MAE)</bdi></td><td>✓</td><td>חיובי, מעניש כל שגיאה</td></tr>
+    <tr><td><bdi dir="ltr">Δ⁴</bdi></td><td>✓</td><td>זוגי, רגיש לחריגים</td></tr>
+    <tr><td><bdi dir="ltr">Δ³</bdi></td><td>✗</td><td>סימנים מתקזזים</td></tr>
+    <tr><td><bdi dir="ltr">Δ^(−2)</bdi></td><td>✗</td><td>מתגמל שגיאות ענק</td></tr>
   </table>
   <ul>
     <li><b>adjusted R²:</b> R² עולה תמיד עם עוד משתנה (גם חסר תועלת). adjusted "מעניש" משתנים מיותרים — פער גדל בין השניים = מודל עמוס. הסרת משתנה לא-מובהק ← adjusted R² עשוי לעלות.</li>
@@ -429,7 +430,7 @@
     <li>R² <b>לעולם לא עולה</b> מהסרת משתנה.</li>
     <li>"למי ההשפעה הגדולה ביותר?" בלי scaling ← <b>לא ניתן לדעת!</b> (מקדם תלוי סקאלה). אחרי scaling — כן, לפי |מקדם|.</li>
     <li>במטריצת <b>מתאמים</b> (פירסון) — כן משווים תמיד: |r| הגבוה מול y מנצח.</li>
-    <li>CI של β1 שכולל 0 (למשל [−3.11, 2.51]) ← אין עדות לקשר לינארי.</li>
+    <li>CI של β1 שכולל 0 (למשל <bdi dir="ltr">[−3.11, 2.51]</bdi>) ← אין עדות לקשר לינארי.</li>
   </ol></div>
   <h3>Multi-collinearity</h3>
   <ul>
@@ -510,10 +511,10 @@
   <div class="s-cls">
   <h2>10 · מרחקים ו-KNN</h2>
   <table>
-    <tr><th>מנהטן</th><td class="ltr">Σ|Δᵢ|</td><th>אוקלידי</th><td class="ltr">√(ΣΔᵢ²)</td></tr>
-    <tr><th>hamming</th><td colspan="3">חלק המקומות השונים, מקום מול מקום — תמורה מלאה = 1.0. מחושב: ([1,0,0],[1,1,0]) = 1/3</td></tr>
+    <tr><th>מנהטן</th><td><bdi dir="ltr">Σ|Δᵢ|</bdi></td><th>אוקלידי</th><td><bdi dir="ltr">√(ΣΔᵢ²)</bdi></td></tr>
+    <tr><th>hamming</th><td colspan="3">חלק המקומות השונים, מקום מול מקום — תמורה מלאה = 1.0. מחושב: (<bdi dir="ltr">[1,0,0]</bdi>,<bdi dir="ltr">[1,1,0]</bdi>) = 1/3</td></tr>
     <tr><th>jaccard (sets)</th><td colspan="3">גודל החיתוך חלקי גודל האיחוד — <b>1 = זהים</b>. מחושב: {1..5} מול {1,2,4,5,6,7,8} ← 4/8 = 0.5</td></tr>
-    <tr><th>scipy.jaccard</th><td colspan="3"><b>אי-דמיון</b> (0 = זהים): אי-הסכמה רק במקומות שלפחות אחד ≠ 0. מחושב: ([1,0,0,0],[1,1,1,0]) = 2/3</td></tr>
+    <tr><th>scipy.jaccard</th><td colspan="3"><b>אי-דמיון</b> (0 = זהים): אי-הסכמה רק במקומות שלפחות אחד ≠ 0. מחושב: (<bdi dir="ltr">[1,0,0,0]</bdi>,<bdi dir="ltr">[1,1,1,0]</bdi>) = 2/3</td></tr>
   </table>
   <div class="fig">
   <svg viewBox="0 0 400 108" xmlns="http://www.w3.org/2000/svg">
@@ -541,7 +542,7 @@
     <li>עמיד לחריגים · <b>ל-KNN אין שלב אימון</b> ← CE loss לא רלוונטי (בחירת K = כיוונון, לא אימון).</li>
     <li><b>NNR:</b> רדיוס ענק ← מחלקת רוב (לא "יותר=מדויק"). features זהים בין datasets ← "ייתכן R1=R2" ✓, "בוודאות" ✗. אחרי scaling הרדיוסים ישתנו.</li>
     <li><b>train/val/test:</b> אימון / כיוונון (K, R) / הערכה סופית נקייה.</li>
-    <li><b>CE:</b> <span class="f">CE = −log₁₀(p)</span>, p = הסתברות המחלקה האמיתית. CE&gt;1 ⇔ p&lt;0.1. דוגמה: אמת A, פלט [0.05, 0.90, 0.05] ← −log(0.05) = <b>1.30</b>. לא חסום מלמעלה.</li>
+    <li><b>CE:</b> <span class="f">CE = −log₁₀(p)</span>, p = הסתברות המחלקה האמיתית. CE&gt;1 ⇔ p&lt;0.1. דוגמה: אמת A, פלט <bdi dir="ltr">[0.05, 0.90, 0.05]</bdi> ← −log(0.05) = <b>1.30</b>. לא חסום מלמעלה.</li>
   </ul>
   </div>
 
@@ -575,7 +576,7 @@
   <ul>
     <li>softmax: כולם ב-(0,1), <b>סכום 1</b>, <b>תמיד חיובי</b> (גם לקלט שלילי!), משמר סדר. מחושב: e^−1=0.368, e^1.5=4.48, e^7=1096.6, סכום 1101.5 ← <span class="f">[0.0003, 0.0041, 0.9956]</span></li>
     <li>חלופות פסולות: חלוקה בסכום (שליליים!) · ריבועים (הורס סדר: −3 מנצח את 1) · argmax קשיח (לא גזיר).</li>
-    <li><b>sigmoid: טווח (0,1) — לא [−1,1] (זה tanh)!</b> בינארי בלבד; לא לרציף. softmax — כל מספר מחלקות (בבינארי שקולה ל-sigmoid).</li>
+    <li><b>sigmoid: טווח (0,1) — לא <bdi dir="ltr">[−1,1]</bdi> (זה tanh)!</b> בינארי בלבד; לא לרציף. softmax — כל מספר מחלקות (בבינארי שקולה ל-sigmoid).</li>
     <li><b>CNN — שיתוף משקלים:</b> פרמטרים כמספר תאי הפילטר + זיהוי feature בכל מקום. <b>LLM:</b> טקסט רהוט ✓, אומן על שיחות ✓, רשת כמסווג token הבא ✓, אחזור עובדות מדויק ✗ (הזיות!).</li>
   </ul>
   </div>
@@ -583,15 +584,15 @@
   <div class="s-clu">
   <h2>12 · אשכולות, PCA ו-Scaling</h2>
   <ul>
-    <li><b>K-Means:</b> עצירה ב<b>התכנסות</b> (לא לפי גודל נתונים). רגיש לאתחול ← ריצות שונות = תוצאות שונות; טיפול: n_init (בוחרים inertia מזערי) + ++KMeans. קיים אתחול שמתכנס באיטרציה אחת. באגים בקוד: shape[0] · range(k) · break · previous=copy(current).</li>
+    <li><b>K-Means:</b> עצירה ב<b>התכנסות</b> (לא לפי גודל נתונים). רגיש לאתחול ← ריצות שונות = תוצאות שונות; טיפול: n_init (בוחרים inertia מזערי) + ++KMeans. קיים אתחול שמתכנס באיטרציה אחת. באגים בקוד: shape<bdi dir="ltr">[0]</bdi> · range(k) · break · previous=copy(current).</li>
     <li><b>בחירת K:</b> לולאה + silhouette (מקסימום) או elbow על <b>inertia</b> <span class="f">= Σ‖x−c‖²</span> — יורד תמיד, מחפשים את ה"שבירה".</li>
-    <li><b>rand index:</b> זוגות מוסכמים / <span class="f">n(n−1)/2</span>. שיטה: לספור את הלא-מוסכמים. [A,A,B,B,B] מול [0,0,1,1,2]: רק (3,5),(4,5) ← 8/10 = <b>0.8</b></li>
+    <li><b>rand index:</b> זוגות מוסכמים / <span class="f">n(n−1)/2</span>. שיטה: לספור את הלא-מוסכמים. [A,A,B,B,B] מול <bdi dir="ltr">[0,0,1,1,2]</bdi>: רק (3,5),(4,5) ← 8/10 = <b>0.8</b></li>
     <li><b>purity:</b> Σ(רוב בכל אשכול)/N. (3+4+2)/12 = <b>0.75</b>. חסם 1; טריוויאלי ב-K=N.</li>
     <li><b>silhouette:</b> <span class="f">s=(b−a)/max(a,b)</span>, ללא תיוגים — הפרדה גיאומטרית. שתי חלוקות נכונות זהות-rand יכולות לקבל s שונה. precision/recall — לא לאשכולות!</li>
     <li><b>אלגוריתם סף-דמיון (תרגיל 4, נבחן פעמיים ב-2025!):</b> MS גבוה ← אשכולות <b>קטנים ורבים</b>; NUM=n ייתכן; "MS1&gt;MS2 ← בוודאות NUM1&gt;NUM2" ✗ (מגמה כן, ודאות לא). יתרונות מול KMeans: לא צריך K, סובלני לחריגים.</li>
     <li><b>DBSCAN:</b> eps↑ ← מיזוג, רעש↓. הכל רעש ← eps↑ או min_samples↓; אשכול ענק ← ההפך. אין K.</li>
     <li><b>PCA:</b> מתאם מושלם ← PC1=100%, PC2=0%. מתאם חזק ← כיוון הסכום מסביר את הרוב.</li>
-    <li><b>StandardScaler</b> (x−μ)/σ ← ממוצע 0, σ=1, לא חסום; פר-עמודה (axis=0!). מחושב: [1,3,5,7,9] ← [−1.41,−0.71,0,0.71,1.41]. <b>MinMax</b> (x−min)/(max−min) ← [0,1]: [−5,10,15,7] ← [0, 0.75, 1, 0.6]. "Standard מעביר ל-[0,1]" ✗!</li>
+    <li><b>StandardScaler</b> (x−μ)/σ ← ממוצע 0, σ=1, לא חסום; פר-עמודה (axis=0!). מחושב: <bdi dir="ltr">[1,3,5,7,9]</bdi> ← <bdi dir="ltr">[−1.41,−0.71,0,0.71,1.41]</bdi>. <b>MinMax</b> (x−min)/(max−min) ← <bdi dir="ltr">[0,1]</bdi>: <bdi dir="ltr">[−5,10,15,7]</bdi> ← <bdi dir="ltr">[0, 0.75, 1, 0.6]</bdi>. "Standard מעביר ל-<bdi dir="ltr">[0,1]</bdi>" ✗!</li>
     <li><b>מונחית</b> = יש תוויות (מחירים, ספרות); <b>לא מונחית</b> = מבנה בלי תוויות (פילוח, קיבוץ). <b>KMeans אינו מסווג!</b></li>
   </ul>
   </div>
