@@ -171,7 +171,7 @@ window.QUESTIONS = [
     "topic": "python",
     "subtopic": "לולאות ואלגוריתמים",
     "source": "מבחן 2023 סמסטר א' מועד ב'",
-    "question": "מה הפלט של קטע הקוד הבא?\n```def function(x, y):\n    if x > y: result = x\n    else: result = y\n    while(True):\n        if((result % x == 0) and (result % y == 0)):\n            out = result```\n            break\n```        result += 1\n    return out\n\nnum1 = 7\nnum2 = 6\nprint(function(num1, num2))```",
+    "question": "מה הפלט של קטע הקוד הבא?\n```def function(x, y):\n    if x > y: result = x\n    else: result = y\n    while(True):\n        if((result % x == 0) and (result % y == 0)):\n            out = result\n            break\n        result += 1\n    return out\n\nnum1 = 7\nnum2 = 6\nprint(function(num1, num2))```",
     "options": [
       "13",
       "42",
@@ -183,7 +183,7 @@ window.QUESTIONS = [
     "explanation": "הפונקציה מתחילה מהגדול מבין השניים (7) ומעלה את result ב-1 עד שהוא מתחלק גם ב-x וגם ב-y.\n\nהמספר הראשון שמתחלק גם ב-7 וגם ב-6 הוא:\n7·6 = 42 (כי 6 ו-7 זרים - אין להם מחלק משותף)\n\nבמילים: התוכנית מחשבת את הכפולה המשותפת הקטנה ביותר (LCM) של שני הקלטים.",
     "variants": [
       {
-        "question": "מה הפלט של קטע הקוד הבא?\n```def function(x, y):\n    if x > y: result = x\n    else: result = y\n    while(True):\n        if((result % x == 0) and (result % y == 0)):\n            out = result```\n            break\n```        result += 1\n    return out\n\nnum1 = 4\nnum2 = 6\nprint(function(num1, num2))```",
+        "question": "מה הפלט של קטע הקוד הבא?\n```def function(x, y):\n    if x > y: result = x\n    else: result = y\n    while(True):\n        if((result % x == 0) and (result % y == 0)):\n            out = result\n            break\n        result += 1\n    return out\n\nnum1 = 4\nnum2 = 6\nprint(function(num1, num2))```",
         "options": [
           "24",
           "12",
@@ -515,7 +515,7 @@ window.QUESTIONS = [
     "topic": "pandas",
     "subtopic": "groupby + merge",
     "source": "מבחן 2024 סמסטר ב' מועד א'",
-    "question": "נתוני עובדים בחברה מסוימת נשמרו ב-dataframe בשם employees עם העמודות: department (מחלקה), emp_id (ת.ז. העובד) ו-salary (שכר חודשי). אנחנו מעוניינים להדפיס את פרטי העובדים אשר מרוויחים שכר גבוה יותר מהממוצע במחלקה שלהם.\n\nאיזה מקטעי הקוד הבאים מבצע את הנדרש?\n```1. avg_salary = employees.groupby('department')['salary'].mean().reset_index()\n   avg_salary.rename(columns={\"salary\": \"salary_avg\"}, inplace=True)\n   employees = employees.merge(avg_salary, on='department')\n   print(employees[employees['salary'] > employees['salary_avg']])```\n2. אותו קוד כמו 1, אבל עם merge(avg_salary, on='department', how='inner')\n```3. employees['average_salary'] = employees.groupby('department')['salary'].mean()\n   employees['above_average'] = employees['salary'] > employees['average_salary']\n   print(employees['above_average'])\n\n4. employees['above_average'] = employees['salary'].apply(lambda x: x > x.mean())\n   print(employees['above_average'].groupby('department'))```",
+    "question": "נתוני עובדים בחברה מסוימת נשמרו ב-dataframe בשם employees עם העמודות: department (מחלקה), emp_id (ת.ז. העובד) ו-salary (שכר חודשי). אנחנו מעוניינים להדפיס את פרטי העובדים אשר מרוויחים שכר גבוה יותר מהממוצע במחלקה שלהם.\n\nאיזה מקטעי הקוד הבאים מבצע את הנדרש?\n```# קטע 1\navg_salary = employees.groupby('department')['salary'].mean().reset_index()\navg_salary.rename(columns={\"salary\": \"salary_avg\"}, inplace=True)\nemployees = employees.merge(avg_salary, on='department')\nprint(employees[employees['salary'] > employees['salary_avg']])\n\n# קטע 2 - זהה לקטע 1, אך עם how='inner' מפורש:\nemployees = employees.merge(avg_salary, on='department', how='inner')\n\n# קטע 3\nemployees['average_salary'] = employees.groupby('department')['salary'].mean()\nemployees['above_average'] = employees['salary'] > employees['average_salary']\nprint(employees['above_average'])\n\n# קטע 4\nemployees['above_average'] = employees['salary'].apply(lambda x: x > x.mean())\nprint(employees['above_average'].groupby('department'))```",
     "options": [
       "קטע 1 בלבד",
       "קטע 3 בלבד",
