@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>דף נוסחאות · מבוא ללמידת מכונה ומדעי הנתונים (12112123)</title>
+<style>
+  :root {
+    --teal: #2a9d8f; --purple: #7c6fb0; --blue: #4a7fb5; --green: #3d9970;
+    --orange: #c0764a; --rose: #b05a7a; --brown: #8a6d3b; --sage: #5b8a72;
+    --ink: #2b2b33; --soft: #55503f; --warn-bg: #fdf3e3; --warn-border: #e0b25c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box;
+       -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: 'Segoe UI', 'Arial Hebrew', Arial, sans-serif; color: var(--ink); background: #eee; }
+  .ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+  .page {
+    width: 210mm; min-height: 296mm; background: #fff; margin: 8px auto;
+    padding: 7mm 8mm; column-count: 2; column-gap: 5mm; column-fill: balance;
+    font-size: 10.2px; line-height: 1.5;
+  }
+  @media print {
+    html, body { background: #fff; margin: 0; padding: 0; }
+    /* @page has ZERO margin: the full A4 sheet is available. The .page keeps
+       its own 210x297mm size + internal padding (box-sizing:border-box), so
+       it fits exactly one physical sheet — identical to the on-screen layout
+       that already renders perfectly. No mismatch = no clipping. */
+    @page { size: A4 portrait; margin: 0; }
+    .page {
+      width: 208mm; height: 295mm; min-height: 295mm;
+      margin: 0 auto; padding: 7mm 8mm;
+      box-shadow: none; overflow: hidden;
+      page-break-after: always; break-after: page;
+    }
+    .page:last-child { page-break-after: avoid; break-after: avoid; }
+    .fig, .recipe, .trap, .box, table { break-inside: avoid; }
+  }
+  .sheet-title {
+    column-span: all; text-align: center; font-size: 13px; font-weight: 800;
+    padding-bottom: 3px; margin-bottom: 5px; border-bottom: 2px solid var(--teal);
+  }
+  .sheet-title small { font-weight: 400; font-size: 8.5px; color: var(--soft); }
+  h2 { font-size: 11.5px; font-weight: 800; color: #fff; padding: 2px 7px; border-radius: 4px; margin: 5px 0 3px; break-after: avoid; }
+  h3 { font-size: 10.4px; font-weight: 700; margin: 4px 0 1px; break-after: avoid; }
+  p, li { margin-bottom: 2.5px; }
+  ul { padding-right: 11px; margin-bottom: 2px; }
+  ol { padding-right: 13px; margin-bottom: 2px; }
+  b { font-weight: 700; }
+  li b:first-child, p b:first-child { margin-inline-end: .15em; }
+  .f { direction: ltr; unicode-bidi: isolate !important; display: inline-block; font-family: 'Cambria Math', 'Times New Roman', serif; font-size: 10.4px; background: #f4f2ec; border-radius: 3px; padding: 0 4px; }
+  .formula-line { direction: ltr; unicode-bidi: isolate; text-align: center; font-family: 'Cambria Math', serif; font-size: 10.5px; background: #f4f2ec; border-radius: 4px; padding: 2px 4px; margin: 2px 0; break-inside: avoid; }
+  table { border-collapse: collapse; width: 100%; margin: 3px 0 4px; break-inside: avoid; font-size: 9.5px; }
+  th, td { border: 0.5px solid #bbb; padding: 1.5px 3px; text-align: center; }
+  th { background: #efece3; font-weight: 700; }
+  .ztable td, .ztable th { direction: ltr; font-family: 'Cambria Math', serif; }
+  .trap { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 5px; padding: 3px 6px; margin: 3px 0; break-inside: avoid; }
+  .trap b:first-child { color: #a05a10; }
+  .box { border: 1px solid #ccc; border-radius: 5px; padding: 3px 6px; margin: 3px 0; break-inside: avoid; }
+  .recipe { background: #eef6f4; border: 1px solid #bcded7; border-radius: 5px; padding: 3px 7px; margin: 3px 0; break-inside: avoid; }
+  .recipe .rt { font-weight: 800; color: #1d7267; font-size: 9.6px; }
+  .fig { break-inside: avoid; margin: 3px 0 4px; text-align: center; }
+  .fig svg { width: 100%; height: auto; display: block; }
+  .figcap { font-size: 8.3px; color: var(--soft); margin-top: 1px; text-align: center; }
+  .s-stats  h2 { background: var(--green); }
+  .s-infer  h2 { background: var(--orange); }
+  .s-python h2 { background: var(--purple); }
+  .s-reg    h2 { background: var(--rose); }
+  .s-cls    h2 { background: var(--teal); }
+  .s-nn     h2 { background: var(--brown); }
+  .s-clu    h2 { background: var(--sage); }
+  .mini { font-size: 8.6px; color: var(--soft); }
+  .kv { display: flex; gap: 5px; flex-wrap: wrap; }
+  .kv span { background: #f4f2ec; border-radius: 3px; padding: 0 4px; }
+  .sp-btn {
+    position: fixed; top: 12px; inset-inline-start: 12px; z-index: 999;
+    background: #2a9d8f; color: #fff; border: none; border-radius: 8px;
+    padding: 9px 16px; font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family: 'Segoe UI', 'Arial Hebrew', Arial, sans-serif;
+    box-shadow: 0 3px 10px rgba(0,0,0,.2);
+  }
+  .sp-btn:hover { filter: brightness(1.08); }
+  @media print { .sp-btn { display: none !important; } }
+</style>
+</head>
+<body>
+<button class="sp-btn" onclick="window.print()">🖨️ הדפסה / שמירה כ-PDF</button>
+
+
+<!-- ================================ PAGE 1 ================================ -->
+<div class="page">
+  <div class="sheet-title">דף נוסחאות ומדריך פתרון · מבוא ללמידת מכונה ומדעי הנתונים <span class="ltr">(12112123)</span><br>
+  <small>עמוד 1/4 · סטטיסטיקה תיאורית · התפלגות נורמלית — מבוסס על 11 מבחני 2023–2025 · כל החישובים אומתו בקוד</small></div>
+
+  <div class="s-stats">
+  <h2>1 · מדדי מרכז — ממוצע, חציון, שכיח</h2>
+  <ul>
+    <li><b>ממוצע</b> <span class="f">= Σx/n</span> — <b>רגיש מאוד לחריגים</b>: ערך קיצוני בודד "מושך" אותו לכיוונו.</li>
+    <li><b>חציון</b> — הערך האמצעי אחרי מיון — <b>עמיד לחריגים</b> (כמעט לא זז). <b>שכיח</b> — הערך הנפוץ ביותר = פסגת ההיסטוגרמה.</li>
+    <li><b>הדגמה:</b> הנתונים <span class="ltr">[1, 2, 3, 4, 100]</span> ← ממוצע = 22, חציון = 3. חריג אחד הזיז את הממוצע פי 7 מהחציון! לכן בנתונים מוטים (שכר!) מדווחים <b>חציון</b>, וגם משלימים ערכים חסרים בחציון.</li>
+  </ul>
+
+  <h2>2 · הטיה (Skew) — הנושא שפותח כמעט כל מבחן</h2>
+  <div class="fig">
+  <svg viewBox="0 0 400 110" xmlns="http://www.w3.org/2000/svg">
+    <!-- positive skew -->
+    <path d="M15,95 C35,20 55,15 75,40 C105,75 150,92 190,95" fill="none" stroke="#3d9970" stroke-width="2.5"/>
+    <line x1="15" y1="95" x2="190" y2="95" stroke="#999" stroke-width="1"/>
+    <line x1="48" y1="95" x2="48" y2="22" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="3,2"/>
+    <line x1="72" y1="95" x2="72" y2="38" stroke="#2c66a8" stroke-width="1.6" stroke-dasharray="3,2"/>
+    <line x1="100" y1="95" x2="100" y2="62" stroke="#7c6fb0" stroke-width="1.6" stroke-dasharray="3,2"/>
+    <text x="48" y="106" font-size="9" text-anchor="middle" fill="#c0392b">שכיח</text>
+    <text x="76" y="17" font-size="9" text-anchor="middle" fill="#2c66a8">חציון</text>
+    <text x="106" y="57" font-size="9" text-anchor="middle" fill="#7c6fb0">ממוצע</text>
+    <path d="M135,80 L175,90" stroke="#a05a10" stroke-width="1.4" fill="none" marker-end="none"/>
+    <text x="158" y="76" font-size="9" text-anchor="middle" fill="#a05a10">זנב ימני</text>
+    <text x="100" y="12" font-size="10" font-weight="bold" text-anchor="middle">מוטה חיובית ←</text>
+    <!-- negative skew (mirror) -->
+    <path d="M210,95 C250,92 295,75 325,40 C345,15 365,20 385,95" fill="none" stroke="#3d9970" stroke-width="2.5"/>
+    <line x1="210" y1="95" x2="385" y2="95" stroke="#999" stroke-width="1"/>
+    <line x1="352" y1="95" x2="352" y2="22" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="3,2"/>
+    <line x1="328" y1="95" x2="328" y2="38" stroke="#2c66a8" stroke-width="1.6" stroke-dasharray="3,2"/>
+    <line x1="300" y1="95" x2="300" y2="62" stroke="#7c6fb0" stroke-width="1.6" stroke-dasharray="3,2"/>
+    <text x="352" y="106" font-size="9" text-anchor="middle" fill="#c0392b">שכיח</text>
+    <text x="324" y="17" font-size="9" text-anchor="middle" fill="#2c66a8">חציון</text>
+    <text x="294" y="57" font-size="9" text-anchor="middle" fill="#7c6fb0">ממוצע</text>
+    <text x="238" y="76" font-size="9" text-anchor="middle" fill="#a05a10">זנב שמאלי</text>
+    <text x="300" y="12" font-size="10" font-weight="bold" text-anchor="middle">→ מוטה שלילית</text>
+  </svg>
+  <div class="figcap">הזנב מושך את הממוצע לכיוונו; השכיח נשאר בפסגה; החציון תמיד באמצע בין שניהם</div>
+  </div>
+  <ul>
+    <li><b>מוטה חיובית (זנב ימני):</b> <span class="f">שכיח &lt; חציון &lt; ממוצע</span>. דוגמאות: שכר, מחירי דירות, זמני המתנה, משקלי ארגזים עם מיעוט כבדים.</li>
+    <li><b>מוטה שלילית (זנב שמאלי):</b> <span class="f">ממוצע &lt; חציון &lt; שכיח</span>. דוגמאות: ציוני מבחן קל, גיל פרישה.</li>
+    <li><b>סימטרית (וכל נורמלית):</b> שלושתם מתלכדים במרכז.</li>
+    <li><b>הכיוון ההפוך:</b> נתון "ממוצע &gt; חציון" ← מוטה חיובית. "ממוצע = חציון" ← עקבי עם סימטריה — <b>אבל לא מוכיח נורמליות</b> (גם אחידה ודו-פסגתית סימטרית מקיימות!).</li>
+    <li><b>זיהוי מציור:</b> מחפשים לאן משתרך הזנב — לשם ההטיה. פסגה משמאל + זנב ימינה = חיובית (לא שלילית!).</li>
+  </ul>
+  <h3>נוסחאות בסיס</h3>
+  <ul>
+    <li><b>שונות:</b> <span class="f">σ² = Σ(xᵢ−μ)²/n</span> · סטיית תקן = √שונות. הדגמה: סטיות −4,−2,0,2,4 ← σ = √(40/5) = √8 = 2.83</li>
+    <li><b>מתאם פירסון:</b> <span class="f">r = cov(x,y)/(σₓ·σᵧ)</span>, טווח <span class="ltr">[−1,1]</span>. r=1 קו עולה מושלם · r≈0 אין קשר <b>לינארי</b> (ייתכן קשר אחר!) · <b>לא תלוי סקאלה</b>.</li>
+    <li><b>מתאם ≠ סיבתיות:</b> לחפש <b>משתנה שלישי</b>: גלידה↔כרישים (קיץ), תחנות כיבוי↔שריפות (גודל עיר).</li>
+  </ul>
+
+  <h2>3 · היסטוגרמה מנורמלת (סכום גבהים = 1)</h2>
+  <div class="recipe"><span class="rt">מתכון קריאה:</span>
+  <ol>
+    <li>מספר פריטים בעמודה שלמה = <span class="f">N × גובה</span>. עמודה בגובה 0.15 עם N=200 ← 30 פריטים.</li>
+    <li>שאלה על <b>חצי עמודה</b> (למשל "כמה מעל 172.5" כשהעמודה 170–175) ← <b>לא ניתן לחשב!</b> נותנים רק חסמים: [סכום העמודות שמעבר, אותו סכום + העמודה החצויה].</li>
+    <li><b>חציון:</b> סוכמים גבהים משמאל עד שמגיעים בדיוק ל-0.5 — שם החציון. אם 0.5 נופל בתוך עמודה — לא ניתן לקבוע מדויק.</li>
+    <li>ממוצע וסטיית תקן — <b>לעולם לא ניתנים לחישוב מדויק</b> מהיסטוגרמה (רק הערכה).</li>
+  </ol></div>
+  <ul>
+    <li><b>צורת הפיזור מספרת על השונות:</b> צורת U (מסה בקצוות) = שונות גבוהה ← רווח סמך <b>רחב</b>; פעמון צר = שונות נמוכה ← רווח צר. מדגם U אינו מנורמלי — אבל CI עדיין תקף (CLT).</li>
+  </ul>
+
+  <h2>4 · סוגי משתנים</h2>
+  <table>
+    <tr><th>סוג</th><th>מבחן</th><th>דוגמאות</th></tr>
+    <tr><td><b>קטגורי נומינלי</b></td><td>אין שום סדר</td><td>קבוצת דם, צבע, עיר, סוג חיה, <b>ת"ז / מיקוד / מס' טלפון (!)</b></td></tr>
+    <tr><td><b>קטגורי אורדינלי</b></td><td>יש סדר, אין "מרחק"</td><td>השכלה, מידות S/M/L, רמת חריפות</td></tr>
+    <tr><td><b>כמותי</b></td><td>חשבון משמעותי</td><td>משקל, גובה, שעות שינה, שכר</td></tr>
+  </table>
+  <p class="mini"><b>הכלל:</b> מספר שמשמש כ"תווית" (אי אפשר לחבר/למצע אותו בהיגיון) = קטגורי. ת"ז היא המלכודת האהובה עליהם.</p>
+  </div>
+
+  <div class="s-stats">
+  <h2>5 · התפלגות נורמלית N(μ, σ)</h2>
+  <div class="formula-line">Z = (x − μ) / σ</div>
+  <div class="fig">
+  <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+    <!-- symmetric 80% -->
+    <path d="M15,100 C55,100 65,18 100,18 C135,18 145,100 185,100" fill="none" stroke="#2a6f97" stroke-width="2"/>
+    <path d="M52,100 C60,55 75,22 100,22 C125,22 140,55 148,100 Z" fill="#8ecae6" opacity="0.55"/>
+    <line x1="15" y1="100" x2="185" y2="100" stroke="#999"/>
+    <line x1="100" y1="100" x2="100" y2="16" stroke="#666" stroke-width="0.8" stroke-dasharray="2,2"/>
+    <text x="100" y="70" font-size="11" font-weight="bold" text-anchor="middle">80%</text>
+    <text x="35" y="80" font-size="9" text-anchor="middle">10%</text>
+    <text x="166" y="80" font-size="9" text-anchor="middle">10%</text>
+    <text x="52" y="111" font-size="8.5" text-anchor="middle" direction="ltr">μ−1.28σ</text>
+    <text x="100" y="111" font-size="9" text-anchor="middle">μ</text>
+    <text x="148" y="111" font-size="8.5" text-anchor="middle" direction="ltr">μ+1.28σ</text>
+    <text x="100" y="10" font-size="9.5" font-weight="bold" text-anchor="middle">טווח סימטרי 80%</text>
+    <!-- left tail P(x<a) -->
+    <path d="M215,100 C255,100 265,18 300,18 C335,18 345,100 385,100" fill="none" stroke="#2a6f97" stroke-width="2"/>
+    <path d="M215,100 C245,99 252,70 262,52 L262,100 Z" fill="#f4a261" opacity="0.6"/>
+    <line x1="215" y1="100" x2="385" y2="100" stroke="#999"/>
+    <line x1="262" y1="100" x2="262" y2="48" stroke="#c0392b" stroke-width="1.4"/>
+    <text x="262" y="111" font-size="9" text-anchor="middle">a</text>
+    <text x="238" y="90" font-size="9" text-anchor="middle">Φ(z)</text>
+    <text x="322" y="70" font-size="9" text-anchor="middle" direction="rtl">P(x&gt;a) = 1−Φ(z)</text>
+    <text x="300" y="10" font-size="9.5" font-weight="bold" text-anchor="middle">הטבלה נותנת את השטח משמאל</text>
+  </svg>
+  <div class="figcap">שמאל: טווח סימטרי — z לפי Z(0.5 + אחוז/2) · ימין: הטבלה תמיד מצטברת משמאל — ל"גדול מ" הופכים!</div>
+  </div>
+  <div class="recipe"><span class="rt">מתכון P(x &lt; a):</span>
+  <ol>
+    <li>תקנון: <span class="f">z = (a−μ)/σ</span></li>
+    <li>טבלה: Φ(z). עבור z שלילי: <span class="f">Φ(−z) = 1 − Φ(z)</span></li>
+    <li>"גדול מ": <span class="f">P(x&gt;a) = 1 − Φ(z)</span> — <b>לא לשכוח להפוך!</b></li>
+    <li>טווח [a,b]: <span class="f">Φ(z_b) − Φ(z_a)</span> · שני זנבות: מחברים אותם.</li>
+  </ol></div>
+  <ul>
+    <li><b>דוגמה מלאה (חזרה ב-3 מבחנים):</b> N(70,10), מתחת ל-50 או מעל 85: Φ(−2) + [1−Φ(1.5)] = 0.0228 + 0.0668 = <b>0.0896 ≈ 9%</b></li>
+    <li><b>טווח סימטרי של X%:</b> <span class="f">z = Z(0.5 + X/2)</span> <bdi dir="ltr">←</bdi> <span class="f">μ ± z·σ</span>. דוגמה 80%: Z(0.90)=1.28 ← N(70,10) נותן <b>[57.2, 82.8]</b></li>
+    <li><b>טווח לא סימטרי:</b> מפרקים לצדדים: Y% משמאל ל-μ ← גבול שמאלי ב-Z(0.5−Y); X% מימין ← Z(0.5+X). חלוקת X=Y+5 מתוך 85% ← Y=40, X=45. <b>בדיוק 50% מצד אחד ← הגבול ∞ (כל הזנב)!</b></li>
+    <li><b>כלל אמפירי:</b> ±σ ≈ 68% · ±2σ ≈ 95% (בסטנדרטית: [−1.96, 1.96]) · ±3σ ≈ 99.7%</li>
+    <li><b>סטנדרטית:</b> μ=0, σ=1 ← שונות = סטיית תקן = 1 (מתלכדות). התלכדות ממוצע=חציון=שכיח — בכל נורמלית.</li>
+  </ul>
+  <h3>דוגמאות תקנון מלאות (N(70,10))</h3>
+  <table>
+    <tr><th>שאלה</th><th>תקנון</th><th>טבלה</th><th>תשובה</th></tr>
+    <tr><td class="ltr">P(x&lt;50)</td><td class="ltr">z=−2</td><td class="ltr">Φ(−2)</td><td class="ltr">0.0228</td></tr>
+    <tr><td class="ltr">P(x&gt;85)</td><td class="ltr">z=1.5</td><td class="ltr">1−Φ(1.5)</td><td class="ltr">0.0668</td></tr>
+    <tr><td class="ltr">P(60&lt;x&lt;80)</td><td class="ltr">z=∓1</td><td class="ltr">Φ(1)−Φ(−1)</td><td class="ltr">0.6826</td></tr>
+    <tr><td>מרכזי 80%</td><td class="ltr">z=1.28</td><td class="ltr">70±1.28·10</td><td class="ltr">[57.2, 82.8]</td></tr>
+  </table>
+  <div class="trap"><b>מלכודות נורמלית:</b> ① "גדול מ" ← 1−Φ. ② z שלילי ← Φ(−z)=1−Φ(z). ③ בדיוק חצי מצד אחד ← הגבול ∞. ④ התלכדות מדדים ≠ נורמליות.</div>
+  <table class="ztable">
+    <tr><th>Φ</th><td>0.85</td><td>0.875</td><td>0.90</td><td>0.925</td><td>0.94</td><td>0.95</td><td>0.975</td><td>0.985</td><td>0.995</td></tr>
+    <tr><th>Z</th><td>1.04</td><td>1.15</td><td>1.28</td><td>1.44</td><td>1.56</td><td>1.65</td><td>1.96</td><td>2.17</td><td>2.58</td></tr>
+    <tr><th>ביטחון</th><td>70%</td><td>75%</td><td>80%</td><td>85%</td><td>88%</td><td>90%</td><td>95%</td><td>97%</td><td>99%</td></tr>
+  </table>
+  <h3>CLT — התפלגות דגימה של ממוצעים</h3>
+  <div class="formula-line">x̄ ~ N(μ, σ/√n) · SE = σ/√n</div>
+  <ul>
+    <li>התפלגות הממוצעים נורמלית <b>לכל</b> התפלגות מקור (גם אחידה/מוטה) — לכן מצורת הפעמון של הממוצעים <b>אי אפשר להסיק כלום על המקור</b>.</li>
+    <li>עקומה <b>צרה</b> יותר ⇔ n <b>גדול</b> יותר. התוחלת נשמרת; סטיית התקן קטנה פי √n (לא נשארת σ, ולא הופכת סטנדרטית).</li>
+  </ul>
+  </div>
+</div>
+
+<!-- ================================ PAGE 2 ================================ -->
+<div class="page">
+  <div class="sheet-title">עמוד 2/4 <small>· רווחי סמך · פייתון ו-Pandas</small></div>
+
+  <div class="s-infer">
+  <h2>6 · רווחי סמך (CI) לתוחלת</h2>
+  <div class="formula-line">CI = x̄ ± Z·s/√n&nbsp;&nbsp;·&nbsp;&nbsp;L = 2·Z·s/√n</div>
+  <p class="mini" style="text-align:center;">(L = האורך הכולל של הרווח — פעמיים המרווח)</p>
+  <div class="fig">
+  <svg viewBox="0 0 400 62" xmlns="http://www.w3.org/2000/svg">
+    <line x1="20" y1="30" x2="380" y2="30" stroke="#999" stroke-width="1"/>
+    <line x1="110" y1="20" x2="110" y2="40" stroke="#c0764a" stroke-width="2"/>
+    <line x1="290" y1="20" x2="290" y2="40" stroke="#c0764a" stroke-width="2"/>
+    <line x1="200" y1="14" x2="200" y2="46" stroke="#2a9d8f" stroke-width="2.4"/>
+    <line x1="110" y1="30" x2="290" y2="30" stroke="#c0764a" stroke-width="3" opacity="0.5"/>
+    <text x="200" y="10" font-size="10" font-weight="bold" text-anchor="middle" direction="ltr">x̄</text>
+    <text x="155" y="56" font-size="9" text-anchor="middle" direction="ltr">− Z·s/√n</text>
+    <text x="248" y="56" font-size="9" text-anchor="middle" direction="ltr">+ Z·s/√n</text>
+    <text x="200" y="43" font-size="8.5" text-anchor="middle" fill="#a05a10">L = כל הקטע</text>
+  </svg>
+  </div>
+  <div class="recipe"><span class="rt">מתכון "[left, right] של X% מהשטח" (חזר 8+ פעמים!):</span>
+  <ol>
+    <li>סימטרי: <span class="f">z = Z(0.5 + X/2)</span> <bdi dir="ltr">←</bdi> <span class="f">left = μ − z·σ, right = μ + z·σ</span>. דוגמה N(70,10), 80%: z=1.28 ← [57.2, 82.8].</li>
+    <li>לא-סימטרי (Y% משמאל, X% מימין): גבול שמאלי ב-<span class="f">μ − Z(0.5−Y)·σ</span>, ימני ב-<span class="f">μ + Z(0.5+X)·σ בהתאמה</span>. <b>צד עם 50% ← ∞.</b></li>
+  </ol></div>
+  <div class="recipe"><span class="rt">מתכון חישוב CI (4 שלבים — להראות הכל!):</span>
+  <ol>
+    <li>אם נתונה <b>שונות</b> ← <span class="f">s = √שונות</span> (המלכודת מס' 1!)</li>
+    <li>Z לפי רמת ביטחון C: <span class="f">Z((1+C)/2)</span> — או ישר משורת "ביטחון" בטבלת עמוד 1. 99%←2.58 · 90%←1.65 · 85%←1.44</li>
+    <li>מרווח: <span class="f">Z·s/√n</span></li>
+    <li>תשובה: <span class="f">[x̄ − מרווח, x̄ + מרווח]</span></li>
+  </ol>
+  <p><b>מחושב:</b> שונות 2.5, n=100, x̄=500.8, ביטחון 99%: s=1.58 ← מרווח 2.58·1.58/10 = 0.41 ← <b>[500.39, 501.21]</b></p></div>
+  <div class="recipe"><span class="rt">מתכון גודל מדגם (אורך נדרש L):</span>
+  <ol>
+    <li><span class="f">√n = 2·Z·s/L</span> ← מעלים בריבוע</li>
+    <li><b>מעגלים תמיד למעלה!</b> (519 אריזות · 1153 ל-IQ · 679 צמיגים)</li>
+  </ol></div>
+  <div class="recipe"><span class="rt">מתכון הפוך (נתון L, מחפשים שונות):</span>
+  <ol>
+    <li><span class="f">s = L·√n/(2Z)</span></li>
+    <li>מבקשים שונות? <b>להעלות בריבוע.</b> (L=0.25, n=729, ביטחון 95% ← s=0.25·27/3.92=1.72 ← s²≈<b>2.96</b>)</li>
+  </ol></div>
+  <div class="trap"><b>מלכודות CI:</b> ① שונות נתונה ← שורש לפני הצבה. ② "אורך/רוחב" = פעמיים המרווח. ③ התפלגות המקור אחידה/מוטה? <b>לא מפריע</b> — CLT מציל במדגם גדול. ④ תקן/דרישה מחוץ לרווח ← לא ניתן להצהיר עמידה בתקן.</div>
+  <h3>פרשנות נכונה — נשאל שוב ושוב</h3>
+  <ul>
+    <li>✓ "בביטחון C, <b>תוחלת</b> האוכלוסייה נמצאת בטווח."</li>
+    <li>✗ "C אחוז מהפרטים בטווח" · ✗ "פרט אקראי ייפול בטווח בהסתברות C" — הרווח על הממוצע <b>בלבד</b>, והוא מצטמצם עם √n; פיזור הפרטים רחב בהרבה.</li>
+  </ul>
+  <h3>מה מצמצם את הרווח</h3>
+  <p class="kv"><span><bdi dir="ltr">n</bdi> ↑</span><span>רמת ביטחון ↓ <bdi dir="ltr">(Z קטן)</bdi></span><span>שונות ↓</span> — וההפכים מרחיבים.</p>
+  <div class="trap"><b>אל תבלבלו CI עם טווח נורמלי!</b> CI לתוחלת = <span class="f">x̄ ± Z·σ/√n</span> (עם √n). טווח סימטרי של X% מהאוכלוסייה = <span class="f">μ ± Z·σ</span> (בלי √n!). שאלת "[left,right] של 80% מהשטח" = הטווח, לא CI.</div>
+  </div>
+
+  <div class="s-python">
+  <h2>7 · פייתון — דפוסים ומלכודות</h2>
+  <ul>
+    <li><b>מפתח מילון חייב hashable:</b> list ← TypeError · tuple/str/int ← תקין.</li>
+    <li><b>tuple = immutable:</b> השמה <bdi dir="ltr" class="f">t[i]=x</bdi> <bdi dir="ltr">←</bdi> <bdi dir="ltr">TypeError</bdi>. list — מותר.</li>
+    <li><b>פרמטרים לפונקציה:</b> <span class="f">lst.append(...)</span> / <span class="f">lst[i]=</span> משנים את <b>המקור</b>; <span class="f">param = [...]</span> <b>מנתק</b> — המקור לא משתנה. מחרוזות immutable — לעולם לא משתנות דרך פרמטר.</li>
+    <li><span class="f">"X".join(s.split("a"))</span> שקול ל-<span class="f">s.replace("a","X")</span></li>
+    <li><span class="f">count(x)&gt;1</span> = חוזרים · <span class="f">count(x)==1</span> = יחידאיים — לקרוא את התנאי בעיון!</li>
+    <li><b>לזהות מה הקוד עושה — סימנים מנחים:</b> בניית מספר הפוך (<span class="f">r = r*10 + num%10</span>) ← פלינדרום/היפוך · <span class="f">LCM: r++ עד r%a==0 and r%b==0</span> · <span class="f">d[c1]!=c2</span> עם reversed ← צופן/מיפוי · <span class="f">set(list)</span> בתוך comprehension ← הסרת כפילויות · <span class="f">key % len</span> ← hash table.</li>
+    <li><span class="f">[x if cond for x in L]</span> ← <b>SyntaxError</b>. תקין: <span class="f">[x for x in L if cond]</span></li>
+    <li><b>map</b> עם כמה iterables — איבר מקביל מכל אחד; חיבור מחרוזות = שרשור ללא רווח.</li>
+    <li><b>hash table:</b> אינדקס = <span class="f">key % N</span>; התנגשויות נערמות ברשימת התא.</li>
+    <li><b>set על tuple מסיר כפילויות!</b> set((1,3,4,5,5,2,1,1)) = {1,2,3,4,5} — קריטי לפני jaccard.</li>
+  </ul>
+  <h3>Pandas — groupby</h3>
+  <ul>
+    <li><b>שתי עמודות:</b> <span class="f">df.groupby(['a','b'])['c'].sum()</span> — <b>רשימה!</b> <span class="f">['a']['b']</span> ← שגיאה. איטרציה: <span class="f">for key, g in df.groupby(...)</span>; <span class="f">g.shape</span> = (שורות, עמודות). ברירת מחדל: ממוין לפי מפתח, והמפתח הופך ל-<b>index</b>.</li>
+    <li><b>as_index=False</b> (נבחן!): שומר את עמודת הקיבוץ כעמודה רגילה במקום index — נוח לפני merge: <span class="f">df.groupby('class', as_index=False)['grade'].mean()</span></li>
+    <li><b>apply עם lambda</b> (חוזר): יצירת עמודה מחושבת — <span class="f">df['y'] = df['date'].apply(lambda d: int(d.split('/')[1]))</span> (חילוץ חודש מ-DD/MM/YYYY).</li>
+  </ul>
+  <h3>Pandas — merge (תאר פלט בצורת dataframe!)</h3>
+  <div class="fig">
+  <svg viewBox="0 0 400 132" xmlns="http://www.w3.org/2000/svg">
+    <text x="55" y="10" font-size="8.6" font-weight="bold" text-anchor="middle">df1 (name, team)</text>
+    <g font-size="8" text-anchor="middle">
+      <rect x="10" y="14" width="90" height="46" fill="#f0eef8" stroke="#bbb"/>
+      <text x="55" y="25">Moshe · development</text><text x="55" y="37">Adam · research</text><text x="55" y="49" fill="#c0392b">Emily · HR</text>
+    </g>
+    <text x="150" y="10" font-size="8.6" font-weight="bold" text-anchor="middle">df2 (team, est)</text>
+    <g font-size="8" text-anchor="middle">
+      <rect x="105" y="14" width="90" height="46" fill="#eef5f2" stroke="#bbb"/>
+      <text x="150" y="25">development · 2008</text><text x="150" y="37">research · 2013</text><text x="150" y="49" fill="#c0392b">finance · 2010</text>
+    </g>
+    <text x="300" y="10" font-size="8.6" font-weight="bold" text-anchor="middle">how = ...</text>
+    <g font-size="7.6">
+      <text x="210" y="26" font-weight="bold" fill="#2a9d8f">inner</text><text x="300" y="26" text-anchor="middle">רק המשותפים: Moshe, Adam</text>
+      <text x="210" y="40" font-weight="bold" fill="#4a7fb5">left</text><text x="300" y="40" text-anchor="middle">כל df1: +Emily עם est=NaN</text>
+      <text x="210" y="54" font-weight="bold" fill="#b05a7a">outer</text><text x="300" y="54" text-anchor="middle">הכל: +Emily(NaN) +finance(NaN)</text>
+    </g>
+    <line x1="10" y1="66" x2="390" y2="66" stroke="#ddd"/>
+    <text x="200" y="80" font-size="8.3" text-anchor="middle" fill="#a05a10" font-weight="bold">שאלת ההמשך הקבועה: מדדים על העמודה אחרי merge</text>
+    <g font-size="8" text-anchor="middle">
+      <text x="100" y="96">how='left', עמודת est: [2008, 2013, NaN]</text>
+      <text x="100" y="112" fill="#2a9d8f">.count() = 2</text><text x="270" y="112" fill="#2a9d8f">.sum() = 4021.0</text>
+      <text x="200" y="126" fill="#8a2a2a">count ו-sum מדלגים על NaN — לא 3!</text>
+    </g>
+  </svg>
+  </div>
+  <h3>פעולות קבוצה (set) — 6 הופעות</h3>
+  <ul>
+    <li><span class="f">A.intersection(B)</span> = חיתוך · <span class="f">A.union(B)</span> = איחוד · גודל החיתוך חלקי גודל האיחוד = jaccard על קבוצות.</li>
+    <li><b>set() מסיר כפילויות תחילה!</b> <span class="f">set((1,3,4,5,5,2,1,1))</span> = {1,2,3,4,5} (5 איברים, לא 8).</li>
+  </ul>
+  <div class="recipe"><span class="rt">מתכון merge:</span>
+  <ol>
+    <li><b>inner</b> = חיתוך המפתחות (רק ערכים שקיימים בשני הצדדים).</li>
+    <li><b>left</b> = כל שורות השמאלי; חסרים בימני ← <b>NaN</b>.</li>
+    <li><b>outer</b> = איחוד; חסרים משני הצדדים ← NaN.</li>
+    <li>מדד על העמודה: <b>count מדלג על NaN</b> (סופר רק ערכים), <b>sum מדלג על NaN</b>. mean = sum/count (על הקיימים).</li>
+  </ol></div>
+  <h3>דפוס הזהב — "מעל הממוצע בקבוצה"</h3>
+  <div class="recipe">
+  <span class="f" style="display:block; text-align:left; direction:ltr; margin:1px 0;">g = df.groupby('dept', as_index=False)['sal'].mean()</span>
+  <span class="f" style="display:block; text-align:left; direction:ltr; margin:1px 0;">g.rename(columns={'sal':'avg'}, inplace=True)</span>
+  <span class="f" style="display:block; text-align:left; direction:ltr; margin:1px 0;">m = df.merge(g, on='dept')</span>
+  <span class="f" style="display:block; text-align:left; direction:ltr; margin:1px 0;">print(m[m['sal'] &gt; m['avg']])</span>
+  <p style="margin-top:2px;">groupby ← rename (שלא יתנגש) ← merge (מצמיד ממוצע לכל שורה) ← סינון בוליאני. חוזר עם עובדים ועם תלמידים/כיתות.</p>
+  </div>
+  <h3>קודים מוכרים (הפלט מאומת בהרצה)</h3>
+  <table>
+    <tr><th>קוד</th><th>מה עושה</th><th>פלט</th></tr>
+    <tr><td class="ltr">set(...)+count&gt;1</td><td>ערכים חוזרים בלבד</td><td class="ltr">[1,2,5,9]</td></tr>
+    <tr><td>ראשוניים 2..19 (מסכה)</td><td>סכום</td><td><b>77</b></td></tr>
+    <tr><td>פלינדרום (בניית הפוך)</td><td>757 / 756</td><td>True / False</td></tr>
+    <tr><td class="ltr">reversed + zip</td><td>צופן מראה a↔z</td><td>a→z, b→y</td></tr>
+    <tr><td class="ltr">LCM (while)</td><td class="ltr">lcm(7,6)</td><td><b>42</b></td></tr>
+    <tr><td class="ltr">len(set(s))/len(s)</td><td>גיוון לקסיקלי</td><td class="ltr">16/19</td></tr>
+    <tr><td class="ltr">sorted(key=d.get)</td><td>תו שכיח</td><td>'e'</td></tr>
+  </table>
+  <div class="recipe"><span class="rt">מתכון "מה מבצעת התוכנית (במשפט אחד)":</span>
+  <ol>
+    <li>להריץ בראש על הקלט הנתון ולרשום את הפלט.</li>
+    <li>לנסח את <b>הכוונה</b>, לא את השורות: "סוכמת את הראשוניים בין 2 ל-20", "בודקת האם המספר פלינדרום" — משפט אחד ברמת מהות.</li>
+  </ol></div>
+  </div>
+</div>
+
+<!-- ================================ PAGE 3 ================================ -->
+<div class="page">
+  <div class="sheet-title">עמוד 3/4 <small>· רגרסיה לינארית ולוגיסטית · סיווג והערכה</small></div>
+
+  <div class="s-reg">
+  <h2>8 · רגרסיה לינארית</h2>
+  <div class="formula-line">MSE = (1/n)·Σ(y − ŷ)²&nbsp;&nbsp;·&nbsp;&nbsp;R² = 1 − SSE/SST</div>
+  <ul>
+    <li><b>R² = שונות מוסברת:</b> 1 − Σ(y−ŷ)²/Σ(y−ȳ)². ההגדרה נשענת על ניבוי רציף ← לא ישימה ללוגיסטית (שם pseudo-R²).</li>
+    <li><b>מקדמי רגרסיה פשוטה:</b> <span class="f">b1 = Σ(x−x̄)(y−ȳ)/Σ(x−x̄)²</span> · <span class="f">b0 = ȳ − b1·x̄</span> ← כשאין קשר (רעש): b1=0 ו-<b>b0 = ממוצע y בדיוק</b>.</li>
+    <li><b>loss חלופי — הכלל:</b> מעניש כל שגיאה (בלי קיזוז) + קטן=טוב.</li>
+  </ul>
+  <table>
+    <tr><th>חלופה ל-MSE</th><th>תקין?</th><th>למה</th></tr>
+    <tr><td class="ltr">|Δ| (MAE)</td><td>✓</td><td>חיובי, מעניש כל שגיאה</td></tr>
+    <tr><td class="ltr">Δ⁴</td><td>✓</td><td>זוגי, רגיש לחריגים</td></tr>
+    <tr><td class="ltr">Δ³</td><td>✗</td><td>סימנים מתקזזים</td></tr>
+    <tr><td class="ltr">Δ^(−2)</td><td>✗</td><td>מתגמל שגיאות ענק</td></tr>
+  </table>
+  <ul>
+    <li><b>adjusted R²:</b> R² עולה תמיד עם עוד משתנה (גם חסר תועלת). adjusted "מעניש" משתנים מיותרים — פער גדל בין השניים = מודל עמוס. הסרת משתנה לא-מובהק ← adjusted R² עשוי לעלות.</li>
+  </ul>
+  <div class="fig">
+  <svg viewBox="0 0 400 88" xmlns="http://www.w3.org/2000/svg">
+    <g><!-- linear -->
+      <rect x="8" y="8" width="86" height="62" fill="none" stroke="#ccc"/>
+      <circle cx="20" cy="60" r="2" fill="#4a7fb5"/><circle cx="32" cy="52" r="2" fill="#4a7fb5"/><circle cx="44" cy="47" r="2" fill="#4a7fb5"/><circle cx="56" cy="38" r="2" fill="#4a7fb5"/><circle cx="68" cy="30" r="2" fill="#4a7fb5"/><circle cx="80" cy="22" r="2" fill="#4a7fb5"/>
+      <line x1="14" y1="64" x2="88" y2="16" stroke="#b05a7a" stroke-width="1.6"/>
+      <text x="51" y="82" font-size="8.5" text-anchor="middle">לינארי ✓ · b1&gt;0</text>
+    </g>
+    <g><!-- U -->
+      <rect x="106" y="8" width="86" height="62" fill="none" stroke="#ccc"/>
+      <path d="M114,18 C130,72 168,72 184,18" fill="none" stroke="#4a7fb5" stroke-width="0" />
+      <circle cx="116" cy="20" r="2" fill="#4a7fb5"/><circle cx="128" cy="42" r="2" fill="#4a7fb5"/><circle cx="140" cy="56" r="2" fill="#4a7fb5"/><circle cx="150" cy="59" r="2" fill="#4a7fb5"/><circle cx="160" cy="55" r="2" fill="#4a7fb5"/><circle cx="172" cy="41" r="2" fill="#4a7fb5"/><circle cx="184" cy="21" r="2" fill="#4a7fb5"/>
+      <text x="149" y="82" font-size="8.5" text-anchor="middle">U ← לא לינארי ✗</text>
+    </g>
+    <g><!-- piecewise -->
+      <rect x="204" y="8" width="86" height="62" fill="none" stroke="#ccc"/>
+      <line x1="210" y1="62" x2="246" y2="46" stroke="#b05a7a" stroke-width="1.6"/>
+      <line x1="246" y1="46" x2="284" y2="14" stroke="#b05a7a" stroke-width="1.6"/>
+      <circle cx="246" cy="46" r="3" fill="none" stroke="#a05a10" stroke-width="1.4"/>
+      <text x="247" y="82" font-size="8.5" text-anchor="middle">piece-wise: חיפוש חיתוך</text>
+    </g>
+    <g><!-- noise -->
+      <rect x="302" y="8" width="86" height="62" fill="none" stroke="#ccc"/>
+      <circle cx="312" cy="30" r="2" fill="#4a7fb5"/><circle cx="322" cy="55" r="2" fill="#4a7fb5"/><circle cx="334" cy="20" r="2" fill="#4a7fb5"/><circle cx="344" cy="48" r="2" fill="#4a7fb5"/><circle cx="354" cy="34" r="2" fill="#4a7fb5"/><circle cx="366" cy="58" r="2" fill="#4a7fb5"/><circle cx="376" cy="26" r="2" fill="#4a7fb5"/>
+      <line x1="308" y1="39" x2="384" y2="39" stroke="#b05a7a" stroke-width="1.6" stroke-dasharray="4,2"/>
+      <text x="345" y="82" font-size="8.5" text-anchor="middle">רעש: b1=0, b0=ȳ</text>
+    </g>
+  </svg>
+  <div class="figcap">לזהות את הצורה לפני שבוחרים מודל: U ← פולינומי/piece-wise (חיפוש נק' חיתוך שממזערת MSE כולל של שני הקטעים)</div>
+  </div>
+  <div class="recipe"><span class="rt">מתכון טבלת OLS (חזרה ב-6 מבחנים!):</span>
+  <ol>
+    <li>לכל משתנה להסתכל <b>רק</b> על P&gt;|t|: p&lt;0.05 = מובהק ← הסרתו <b>תוריד</b> R². p גדול = לא מובהק ← הסרה לא משפיעה; <b>adjusted R² אף עשוי לעלות</b>.</li>
+    <li>R² <b>לעולם לא עולה</b> מהסרת משתנה.</li>
+    <li>"למי ההשפעה הגדולה ביותר?" בלי scaling ← <b>לא ניתן לדעת!</b> (מקדם תלוי סקאלה). אחרי scaling — כן, לפי |מקדם|.</li>
+    <li>במטריצת <b>מתאמים</b> (פירסון) — כן משווים תמיד: |r| הגבוה מול y מנצח.</li>
+    <li>CI של β1 שכולל 0 (למשל [−3.11, 2.51]) ← אין עדות לקשר לינארי.</li>
+  </ol></div>
+  <h3>Multi-collinearity</h3>
+  <ul>
+    <li>= מתאם חזק בין משתנים <b>בלתי תלויים</b> (x2–x4: 0.84 · שטח↔חדרים).</li>
+    <li><b>פוגע:</b> פרשנות מקדמים, סימן הפוך, מובהקות מזויפת (p גדול למרות קשר אמיתי). <b>לא פוגע:</b> R², חיזוי, test.</li>
+    <li>זיהוי <b>קל</b> — מטריצת מתאמים. פתרון: להסיר את בעל המתאם הנמוך יותר עם y. scaling / dummy — לא פותרים.</li>
+    <li><b>דוגמה (2025א):</b> Y = 3.36 + 0.2·size − 0.52·bedrooms. הצבה (1500, 3): 3.36+300−1.56 = <b>301.8</b> ✓. "כל חדר מוריד 0.52" ✗ — מקדם שלילי בגלל collinearity; המודל תקף לניבוי, R² גבוה.</li>
+  </ul>
+  <div class="recipe"><span class="rt">מתכון "האם מתאים לרגרסיה לינארית?" (מטבלת נתונים):</span>
+  <ol>
+    <li>לצייר/לדמיין את הנקודות. מגמה מונוטונית (רק עולה או רק יורד) ← מתאים, b1≠0.</li>
+    <li>צורת U / הפוך-U (יורד ואז עולה) ← <b>לא מתאים</b> — קו ישר יפספס. (חשבון חשמל מול טמפ' = U קלאסי.)</li>
+    <li>אומדן "על מפית": b1 ≈ Δy/Δx מהקצוות · b0 ≈ y ההתחלתי פחות b1·x.</li>
+  </ol></div>
+  <h3>scaling · קידוד · חסרים · לוגיסטית</h3>
+  <ul>
+    <li>scaling ברגרסיה: <b>לא</b> משנה את טיב המודל; <b>כן</b> משנה מקדמים (גם scaling של y). לא הכרחי — בניגוד ל-KNN/KMeans/רשתות.</li>
+    <li>נומינלי ← <b>dummy (one-hot)</b>. קידוד אזורים 1-5 ← כופה סדר ומרחק מלאכותיים ✗ (כשל: מחיר גבוה באמצע הציר).</li>
+    <li>ערכים חסרים בהתפלגות מוטה ← <b>חציון</b>.</li>
+    <li>לוגיסטית: <b>sigmoid</b> <span class="f">σ(z)=1/(1+e^−z)</span> ← הסתברות; אימון <b>log loss</b> (לזהות במבחן!): <span class="f">−[y·log(ŷ)+(1−y)·log(1−ŷ)]</span> — לא MSE.</li>
+    <li><b>למה לא R² רגיל בלוגיסטית?</b> R² מבוסס ריבועי סטיות של ניבוי <b>רציף</b> סביב ממוצע; כאן התוויות 0/1 והפלט הסתברות ← ההגדרה לא משקפת טיב סיווג. לכן pseudo-R² (McFadden). הערכה נוספת: accuracy, confusion, precision/recall, ROC/AUC.</li>
+    <li><b>0-1 loss</b> "עובד" (סופר טעויות) אבל גס — נותן עונש זהה לטעות ב-0.49 ולטעות ב-0.01; log loss מבחין ולכן עדיף לאימון.</li>
+  </ul>
+  </div>
+
+  <div class="s-cls">
+  <h2>9 · סיווג והערכה</h2>
+  <div class="recipe"><span class="rt">איזה מודל לפי צורת הפיזור?</span> נתונים שזורים / טבעת / לא-לינארי ← <b>KNN, NNR, MLP</b> ✓. רגרסיה לוגיסטית ← גבול <b>לינארי</b> בלבד ✗. רגרסיה לינארית ← לא מסווג כלל ✗. KMeans ← לא מונחה, לא מנבא מחלקות ✗.</div>
+  <div class="fig">
+  <svg viewBox="0 0 400 96" xmlns="http://www.w3.org/2000/svg">
+    <!-- confusion grid -->
+    <rect x="140" y="26" width="52" height="20" fill="#f7d9d9"/>
+    <rect x="140" y="46" width="52" height="20" fill="#f7d9d9"/>
+    <rect x="140" y="66" width="52" height="20" fill="#f7d9d9"/>
+    <rect x="140" y="26" width="156" height="20" fill="#d9e8f7" opacity="0.85"/>
+    <rect x="140" y="26" width="52" height="20" fill="#c8b7e0"/>
+    <g font-size="9" text-anchor="middle">
+      <text x="166" y="18">pred A</text><text x="218" y="18">pred B</text><text x="270" y="18">pred C</text>
+      <text x="112" y="40">act A</text><text x="112" y="60">act B</text><text x="112" y="80">act C</text>
+      <text x="166" y="40" font-weight="bold">50</text><text x="218" y="40">10</text><text x="270" y="40">10</text>
+      <text x="166" y="60">20</text><text x="218" y="60" font-weight="bold">50</text><text x="270" y="60">20</text>
+      <text x="166" y="80">5</text><text x="218" y="80">5</text><text x="270" y="80" font-weight="bold">50</text>
+    </g>
+    <g stroke="#999" stroke-width="0.7" fill="none">
+      <line x1="140" y1="26" x2="296" y2="26"/><line x1="140" y1="46" x2="296" y2="46"/><line x1="140" y1="66" x2="296" y2="66"/><line x1="140" y1="86" x2="296" y2="86"/>
+      <line x1="140" y1="26" x2="140" y2="86"/><line x1="192" y1="26" x2="192" y2="86"/><line x1="244" y1="26" x2="244" y2="86"/><line x1="296" y1="26" x2="296" y2="86"/>
+    </g>
+    <text x="360" y="42" font-size="8.6" text-anchor="middle" fill="#8a2a2a">עמודה אדומה =</text>
+    <text x="360" y="52" font-size="8.6" text-anchor="middle" fill="#8a2a2a">precision(A) = 50/75</text>
+    <text x="52" y="52" font-size="8.6" text-anchor="middle" fill="#1f4e79">שורה כחולה =</text>
+    <text x="52" y="62" font-size="8.6" text-anchor="middle" fill="#1f4e79">recall(A) = 50/70</text>
+    <text x="218" y="95" font-size="8.6" text-anchor="middle">accuracy = אלכסון/הכל = 150/220</text>
+  </svg>
+  <div class="figcap">אותו תא אלכסון (50), מכנים שונים: precision = עמודה (מה שחזיתי) · recall = שורה (מה שאמיתי)</div>
+  </div>
+  <div class="recipe"><span class="rt">מתכון confusion:</span>
+  <ol>
+    <li>סה"כ דוגמאות = סכום כל התאים (220).</li>
+    <li>precision(X) = תא האלכסון של X חלקי <b>סכום עמודת</b> predicted X.</li>
+    <li>recall(X) = אותו תא חלקי <b>סכום שורת</b> actual X.</li>
+    <li>"כמה דוגמאות B יש" = סכום שורת B (90).</li>
+  </ol></div>
+  <ul>
+    <li><bdi dir="ltr">P, R ∈ [0,1]</bdi> · סכומם על מחלקות לא חייב 1 · <bdi dir="ltr">ΣR = 3</bdi> ייתכן (מסווג מושלם) · <bdi dir="ltr">P+R ≤ 2</bdi> תמיד · <b><bdi dir="ltr">P = 1</bdi> לא גורר <bdi dir="ltr">R = 1</bdi></b> (מסווג "שמרן").</li>
+    <li><b>accuracy לבדו לא מספיק:</b> מחלה של 1% — "תמיד בריא" נותן 99% ומחמיץ הכל (recall=0). שני מסווגים עם acc זהה ← נעדיף את המכסה את <b>כל</b> המחלקות.</li>
+    <li><b>ROC/AUC:</b> TPR מול FPR על פני כל הספים. <bdi dir="ltr">AUC ≈ 1</bdi> דירוג מושלם · <bdi dir="ltr">0.5</bdi> ניחוש · <b>שינוי סף לא משנה <bdi dir="ltr">AUC</bdi></b>.</li>
+  </ul>
+  <div class="box"><b>דוגמה מלאה (מהמטריצה למעלה, סה"כ 220):</b><br>
+  precision(A)=50/75 · recall(A)=50/70 · precision(C)=50/80 · recall(C)=50/60 · accuracy=150/220 ≈ 0.68 · דוגמאות B בפועל = שורת B = 90.</div>
+  <div class="box"><b>שני מסווגים, אותו accuracy (5/10):</b> מסווג שלא חוזה C אף פעם (recall(C)=0) נחות מזה שמכסה את כל שלוש המחלקות — <b>נעדיף כיסוי מלא</b>. זו הסיבה ש-accuracy לבד מטעה.</div>
+  </div>
+</div>
+
+<!-- ================================ PAGE 4 ================================ -->
+<div class="page">
+  <div class="sheet-title">עמוד 4/4 <small>· KNN ומרחקים · רשתות ו-GD · אשכולות · מלכודות-על</small></div>
+
+  <div class="s-cls">
+  <h2>10 · מרחקים ו-KNN</h2>
+  <table>
+    <tr><th>מנהטן</th><td class="ltr">Σ|Δᵢ|</td><th>אוקלידי</th><td class="ltr">√(ΣΔᵢ²)</td></tr>
+    <tr><th>hamming</th><td colspan="3">חלק המקומות השונים, מקום מול מקום — תמורה מלאה = 1.0. מחושב: ([1,0,0],[1,1,0]) = 1/3</td></tr>
+    <tr><th>jaccard (sets)</th><td colspan="3">גודל החיתוך חלקי גודל האיחוד — <b>1 = זהים</b>. מחושב: {1..5} מול {1,2,4,5,6,7,8} ← 4/8 = 0.5</td></tr>
+    <tr><th>scipy.jaccard</th><td colspan="3"><b>אי-דמיון</b> (0 = זהים): אי-הסכמה רק במקומות שלפחות אחד ≠ 0. מחושב: ([1,0,0,0],[1,1,1,0]) = 2/3</td></tr>
+  </table>
+  <div class="fig">
+  <svg viewBox="0 0 400 108" xmlns="http://www.w3.org/2000/svg">
+    <rect x="30" y="6" width="150" height="88" fill="none" stroke="#ccc"/>
+    <circle cx="55" cy="30" r="4" fill="#c0392b"/><circle cx="80" cy="20" r="4" fill="#c0392b"/><circle cx="70" cy="48" r="4" fill="#c0392b"/>
+    <rect x="120" y="62" width="8" height="8" fill="#2c66a8"/><rect x="145" y="72" width="8" height="8" fill="#2c66a8"/><rect x="132" y="40" width="8" height="8" fill="#2c66a8"/>
+    <circle cx="103" cy="52" r="5" fill="none" stroke="#2a9d8f" stroke-width="1.8"/>
+    <circle cx="103" cy="52" r="26" fill="none" stroke="#2a9d8f" stroke-width="1" stroke-dasharray="3,2"/>
+    <line x1="103" y1="52" x2="70" y2="48" stroke="#888" stroke-width="0.8"/>
+    <line x1="103" y1="52" x2="120" y2="66" stroke="#888" stroke-width="0.8"/>
+    <line x1="103" y1="52" x2="132" y2="44" stroke="#888" stroke-width="0.8"/>
+    <text x="103" y="104" font-size="8.6" text-anchor="middle">K=3: אדום 1, כחול 2 ← כחול · המעגל = NNR ברדיוס R</text>
+    <text x="290" y="26" font-size="9" text-anchor="middle" font-weight="bold">שאלת פיזור — התבנית הקבועה:</text>
+    <text x="290" y="42" font-size="8.6" text-anchor="middle">K=1 טועה (שכן בודד מטעה)</text>
+    <text x="290" y="56" font-size="8.6" text-anchor="middle">K=3 מתקן (רוב מקומי)</text>
+    <text x="290" y="70" font-size="8.6" text-anchor="middle">"קיים R עם דיוק מלא" ← לרוב נכון</text>
+    <text x="290" y="88" font-size="8.6" text-anchor="middle">מתאים ל-MLP ✓ · KMeans ✗ · לינארית ✗</text>
+  </svg>
+  </div>
+  <div class="recipe"><span class="rt">מתכון KNN מחושב (מנהטן, מ-(2,2), K=3):</span><br>
+  אל (1,1)W=2 · (3,2)W=<b>1</b> · (2,5)B=<b>3</b> · (1,5)W=4 · (4,4)B=4 ← שלושה קרובים: (3,2)W,(1,1)W,(2,5)B ← רוב <b>White</b>. (עם K=1 היה יוצא אחרת — לשים לב ל-K!)</div>
+  <ul>
+    <li><b>K:</b> גדול ≠ טוב! K=|train| ← תמיד מחלקת הרוב. K קטן ← רגיש לרעש. בוחרים ב-validation. K אי-זוגי מונע תיקו <b>רק בבינארי</b> (2-2-1 בחמש מחלקות!).</li>
+    <li><b>scaling קריטי</b>; אבל הכפלה <b>אחידה</b> של כל הצירים ← לא משנה כלום (סדר שכנים נשמר). StandardScaler שונה-לכל-feature ← כן משנה. אחרי Standard מרחק <b>לא חסום</b> (מעל √N אפשרי); אחרי MinMax — חסום ב-√N.</li>
+    <li>עמיד לחריגים · <b>ל-KNN אין שלב אימון</b> ← CE loss לא רלוונטי (בחירת K = כיוונון, לא אימון).</li>
+    <li><b>NNR:</b> רדיוס ענק ← מחלקת רוב (לא "יותר=מדויק"). features זהים בין datasets ← "ייתכן R1=R2" ✓, "בוודאות" ✗. אחרי scaling הרדיוסים ישתנו.</li>
+    <li><b>train/val/test:</b> אימון / כיוונון (K, R) / הערכה סופית נקייה.</li>
+    <li><b>CE:</b> <span class="f">CE = −log₁₀(p)</span>, p = הסתברות המחלקה האמיתית. CE&gt;1 ⇔ p&lt;0.1. דוגמה: אמת A, פלט [0.05, 0.90, 0.05] ← −log(0.05) = <b>1.30</b>. לא חסום מלמעלה.</li>
+  </ul>
+  </div>
+
+  <div class="s-nn">
+  <h2>11 · רשתות נוירונים ו-Gradient Descent</h2>
+  <div class="fig">
+  <svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20,14 C60,90 130,90 170,14" fill="none" stroke="#8a6d3b" stroke-width="2"/>
+    <circle cx="34" cy="34" r="3" fill="#c0392b"/><circle cx="52" cy="56" r="3" fill="#c0392b"/><circle cx="70" cy="70" r="3" fill="#c0392b"/><circle cx="88" cy="77" r="3" fill="#c0392b"/>
+    <path d="M37,37 L49,53 M55,59 L67,67 M73,72 L85,76" stroke="#c0392b" stroke-width="1.1"/>
+    <text x="95" y="94" font-size="8.6" text-anchor="middle">α מתאים: יורדים למינימום</text>
+    <path d="M225,14 C265,90 335,90 375,14" fill="none" stroke="#8a6d3b" stroke-width="2"/>
+    <line x1="245" y1="28" x2="355" y2="28" stroke="#c0392b" stroke-width="1.1" stroke-dasharray="4,2"/>
+    <circle cx="245" cy="28" r="3" fill="#c0392b"/><circle cx="355" cy="28" r="3" fill="#c0392b"/>
+    <text x="300" y="20" font-size="8.6" text-anchor="middle">±5 ↔ ∓5</text>
+    <text x="300" y="94" font-size="8.6" text-anchor="middle">α גדול (=1 על x²): זגזוג נצחי</text>
+  </svg>
+  </div>
+  <div class="recipe"><span class="rt">מתכון צעד GD:</span> ① נגזרת בנקודה: f'(x) ② צעד = α·f'(x) ③ <span class="f">x ← x − צעד</span>. מקסימום? מחליפים ל-<b>+</b>. מחושב: y=x²+3x, α=0.1, x=0 ← f'=3 ← x = <b>−0.3</b>. השלמת קוד: slope=derivative(x) (לא הפונקציה!) ← step=lr·slope ← x=x−step.</div>
+  <table>
+    <tr><th>α</th><th>1 (על x², מ-5)</th><th>0.5</th><th>0.1</th><th>−0.1</th><th>0</th><th>גדול מאוד</th></tr>
+    <tr><td>קורה</td><td>זגזוג ±5 נצחי</td><td>0 בצעד אחד</td><td>ירידה הדרגתית</td><td>מטפס ומתרחק</td><td>לא זז</td><td>התבדרות</td></tr>
+  </table>
+  <ul>
+    <li>תלולה (20x²) מסוכנת ממתונה (2x²) עם אותו α ← scaling "מעגל" את נוף ה-loss ועוזר לאימון.</li>
+    <li><b>GD מול פתרון אנליטי:</b> יתרון — עובד כשאין פתרון ל-f'=0; חיסרון — מקורב, עלול להיתקע בלוקאלי.</li>
+    <li><b>Perceptron:</b> רק הפרדה לינארית — נכשל ב-XOR; מדרגה לא גזירה. הפתרון: MLP + אקטיבציות לא-לינאריות.</li>
+  </ul>
+  <h3>softmax · sigmoid</h3>
+  <div class="formula-line">softmax(zᵢ) = e^zᵢ / Σe^zⱼ&nbsp;&nbsp;·&nbsp;&nbsp;σ(z) = 1/(1+e^−z)</div>
+  <ul>
+    <li>softmax: כולם ב-(0,1), <b>סכום 1</b>, <b>תמיד חיובי</b> (גם לקלט שלילי!), משמר סדר. מחושב: e^−1=0.368, e^1.5=4.48, e^7=1096.6, סכום 1101.5 ← <span class="f">[0.0003, 0.0041, 0.9956]</span></li>
+    <li>חלופות פסולות: חלוקה בסכום (שליליים!) · ריבועים (הורס סדר: −3 מנצח את 1) · argmax קשיח (לא גזיר).</li>
+    <li><b>sigmoid: טווח (0,1) — לא [−1,1] (זה tanh)!</b> בינארי בלבד; לא לרציף. softmax — כל מספר מחלקות (בבינארי שקולה ל-sigmoid).</li>
+    <li><b>CNN — שיתוף משקלים:</b> פרמטרים כמספר תאי הפילטר + זיהוי feature בכל מקום. <b>LLM:</b> טקסט רהוט ✓, אומן על שיחות ✓, רשת כמסווג token הבא ✓, אחזור עובדות מדויק ✗ (הזיות!).</li>
+  </ul>
+  </div>
+
+  <div class="s-clu">
+  <h2>12 · אשכולות, PCA ו-Scaling</h2>
+  <ul>
+    <li><b>K-Means:</b> עצירה ב<b>התכנסות</b> (לא לפי גודל נתונים). רגיש לאתחול ← ריצות שונות = תוצאות שונות; טיפול: n_init (בוחרים inertia מזערי) + ++KMeans. קיים אתחול שמתכנס באיטרציה אחת. באגים בקוד: shape[0] · range(k) · break · previous=copy(current).</li>
+    <li><b>בחירת K:</b> לולאה + silhouette (מקסימום) או elbow על <b>inertia</b> <span class="f">= Σ‖x−c‖²</span> — יורד תמיד, מחפשים את ה"שבירה".</li>
+    <li><b>rand index:</b> זוגות מוסכמים / <span class="f">n(n−1)/2</span>. שיטה: לספור את הלא-מוסכמים. [A,A,B,B,B] מול [0,0,1,1,2]: רק (3,5),(4,5) ← 8/10 = <b>0.8</b></li>
+    <li><b>purity:</b> Σ(רוב בכל אשכול)/N. (3+4+2)/12 = <b>0.75</b>. חסם 1; טריוויאלי ב-K=N.</li>
+    <li><b>silhouette:</b> <span class="f">s=(b−a)/max(a,b)</span>, ללא תיוגים — הפרדה גיאומטרית. שתי חלוקות נכונות זהות-rand יכולות לקבל s שונה. precision/recall — לא לאשכולות!</li>
+    <li><b>אלגוריתם סף-דמיון (תרגיל 4, נבחן פעמיים ב-2025!):</b> MS גבוה ← אשכולות <b>קטנים ורבים</b>; NUM=n ייתכן; "MS1&gt;MS2 ← בוודאות NUM1&gt;NUM2" ✗ (מגמה כן, ודאות לא). יתרונות מול KMeans: לא צריך K, סובלני לחריגים.</li>
+    <li><b>DBSCAN:</b> eps↑ ← מיזוג, רעש↓. הכל רעש ← eps↑ או min_samples↓; אשכול ענק ← ההפך. אין K.</li>
+    <li><b>PCA:</b> מתאם מושלם ← PC1=100%, PC2=0%. מתאם חזק ← כיוון הסכום מסביר את הרוב.</li>
+    <li><b>StandardScaler</b> (x−μ)/σ ← ממוצע 0, σ=1, לא חסום; פר-עמודה (axis=0!). מחושב: [1,3,5,7,9] ← [−1.41,−0.71,0,0.71,1.41]. <b>MinMax</b> (x−min)/(max−min) ← [0,1]: [−5,10,15,7] ← [0, 0.75, 1, 0.6]. "Standard מעביר ל-[0,1]" ✗!</li>
+    <li><b>מונחית</b> = יש תוויות (מחירים, ספרות); <b>לא מונחית</b> = מבנה בלי תוויות (פילוח, קיבוץ). <b>KMeans אינו מסווג!</b></li>
+  </ul>
+  </div>
+
+  <h3>סיכום: פונקציית אימון והערכה לכל מודל</h3>
+  <table>
+    <tr><th>מודל</th><th>אימון (loss)</th><th>scaling חשוב?</th><th>לא-לינארי?</th></tr>
+    <tr><td>רגרסיה לינארית</td><td>MSE</td><td>לא (רק לפרשנות)</td><td>לא</td></tr>
+    <tr><td>רגרסיה לוגיסטית</td><td>log loss</td><td>כן (ב-GD)</td><td>לא (גבול לינארי)</td></tr>
+    <tr><td>KNN / NNR</td><td><b>אין אימון!</b></td><td>כן (מרחקים)</td><td>כן ✓</td></tr>
+    <tr><td>רשת (MLP)</td><td>cross-entropy</td><td>כן</td><td>כן ✓</td></tr>
+    <tr><td>KMeans</td><td>inertia (לא מונחה)</td><td>כן</td><td>—</td></tr>
+  </table>
+  <div class="trap">
+  <b>מלכודות-על — לבדוק לפני הגשה:</b>
+  ① שונות נתונה ← שורש. ② אורך CI = 2×מרווח; n מעוגל למעלה. ③ ת"ז/מיקוד = קטגורי. ④ sigmoid ∈ (0,1). ⑤ K אי-זוגי רק בבינארי. ⑥ "ייתכן" כמעט תמיד נכון, "בוודאות" כמעט תמיד לא. ⑦ "הכי משפיע" בלי scaling ← לא ניתן לדעת. ⑧ P(x&gt;a) — להפוך את ערך הטבלה. ⑨ KMeans אינו מסווג; ל-KNN אין אימון. ⑩ merge: count/sum מדלגים על NaN. ⑪ R² לא עולה בהסרה. ⑫ collinearity לא פוגע בחיזוי — רק בפרשנות.
+  </div>
+  <div class="box"><b>מבנה המבחן (לפי 11 מועדים):</b> ~14 שאלות · שעתיים וחצי · "מה יודפס + מה מבצעת (במשפט אחד)" · "נכון/לא נכון והסבירו" · "סמנו את <b>כל</b> הנכונות" · חישוב מלא עם דרך · שאלת פיזור · שאלת OLS. <b>טכניקה:</b> נכון/לא-נכון בלי נימוק = חצי נקודות; בחישובים להראות הצבה מלאה — נקודות חלקיות על דרך; "מה מבצעת" — משפט אחד ברמת כוונה.</div>
+  <p class="mini" style="text-align:center; margin-top:3px;">כל החישובים אומתו בהרצת קוד · בהצלחה! 🍀</p>
+</div>
+
+</body>
+</html>

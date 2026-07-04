@@ -67,6 +67,13 @@
         <span class="mode-cta">לתרגל ניסוח ←</span>
       </button>
 
+      <button class="mode-card mode-formula" data-action="open-formula">
+        <div class="mode-icon">📄</div>
+        <h3>דף נוסחאות (4 עמ')</h3>
+        <p>מדריך פתרון מלא עם נוסחאות, ציורים ומתכונים לכל סוג שאלה. כולל גרסה להדפסה.</p>
+        <span class="mode-cta">לצפייה והדפסה ←</span>
+      </button>
+
       <button class="mode-card mode-marked" data-action="open-marked">
         <div class="mode-icon">★</div>
         <h3>שאלות מסומנות</h3>
@@ -222,6 +229,17 @@
   </div>
   <div class="practice-filters" id="open-filters"></div>
   <div class="practice-content" id="open-content"></div>
+</div>
+
+<div id="view-formula" class="view hidden">
+  <div class="fs-toolbar">
+    <button class="btn-back" data-action="back-home">→ חזרה לדף הבית</button>
+    <a class="fs-print-btn" id="fs-print" href="formula-sheet.pdf" target="_blank">🖨️ פתח PDF להדפסה</a>
+    <a class="fs-print-btn fs-dl" href="formula-sheet.pdf" download="formula-sheet-4pages.pdf">⬇ הורדת ה-PDF</a>
+    <button class="fs-open-btn" id="fs-open">↗ גרסת דפדפן בטאב חדש</button>
+    <span class="fs-hint">ה-PDF מעומד ל-4 עמודי A4 בדיוק — פשוט הדפיסו אותו</span>
+  </div>
+  <iframe id="fs-frame" src="formula-sheet.html" title="דף נוסחאות"></iframe>
 </div>
 
 <!-- Toast notifications -->

@@ -1301,6 +1301,19 @@ document.addEventListener('click', (e) => {
     case 'open-open':
       OpenQ.show();
       break;
+    case 'open-formula':
+      showView('formula');
+      setTimeout(() => {
+        const openBtn = document.getElementById('fs-open');
+        if (openBtn && !openBtn.dataset.wired) {
+          openBtn.dataset.wired = '1';
+          openBtn.addEventListener('click', () => {
+            const f = document.getElementById('fs-frame');
+            window.open(f ? f.getAttribute('src') : 'formula-sheet.html', '_blank');
+          });
+        }
+      }, 100);
+      break;
     case 'back-home':
       showView('home');
       renderHome();
