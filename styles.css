@@ -478,18 +478,20 @@ body {
 
 /* ===== Floating Z-table ===== */
 .ztable-fab {
-  position: fixed; bottom: 20px; inset-inline-start: 20px; z-index: 40;
-  width: 52px; height: 52px; border-radius: 50%;
+  position: fixed; bottom: 24px; right: 24px; left: auto; z-index: 200;
+  width: 64px; height: 64px; border-radius: 50%;
   background: var(--green, #3d9970); color: #fff; border: none;
-  font-size: 22px; font-weight: 800; font-family: 'Cambria Math', serif;
-  cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.22);
+  font-size: 27px; font-weight: 800; font-family: 'Cambria Math', serif;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,.28);
+  display: flex; align-items: center; justify-content: center;
 }
+.ztable-fab::after { content: ''; }
 .ztable-fab:hover { filter: brightness(1.08); }
 .ztable-panel {
-  position: fixed; bottom: 82px; inset-inline-start: 20px; z-index: 40;
-  width: min(92vw, 640px); max-height: 70vh; overflow: auto;
+  position: fixed; bottom: 100px; right: 24px; left: auto; z-index: 200;
+  width: min(94vw, 720px); max-height: 74vh; overflow: auto;
   background: #fff; border: 1px solid var(--border, #e3dccb); border-radius: 14px;
-  box-shadow: 0 12px 40px rgba(0,0,0,.22); padding: 14px 16px;
+  box-shadow: 0 12px 44px rgba(0,0,0,.26); padding: 16px 18px;
 }
 .ztable-head {
   display: flex; justify-content: space-between; align-items: center;
@@ -499,7 +501,7 @@ body {
   background: none; border: none; font-size: 18px; cursor: pointer; color: var(--ink-soft,#6b6455);
 }
 .ztable-note { font-size: 12px; color: var(--ink-soft, #6b6455); margin: 4px 0; }
-.ztable-full { width: 100%; border-collapse: collapse; direction: ltr; font-size: 11px; font-family: 'Cambria Math', serif; }
-.ztable-full th, .ztable-full td { border: 0.5px solid #d8d2c4; padding: 2px 4px; text-align: center; }
+.ztable-full { width: 100%; border-collapse: collapse; direction: ltr; font-size: 13px; font-family: 'Cambria Math', serif; }
+.ztable-full th, .ztable-full td { border: 0.5px solid #d8d2c4; padding: 4px 5px; text-align: center; }
 .ztable-full th { background: #eef4f0; font-weight: 700; position: sticky; top: 0; }
 .ztable-full tr th:first-child { position: sticky; inset-inline-start: 0; background: #eef4f0; }

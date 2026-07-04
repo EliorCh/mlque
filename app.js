@@ -1390,7 +1390,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     return html;
   }
-  document.addEventListener('DOMContentLoaded', () => {
+  function wireZTable() {
     const fab = document.getElementById('ztable-fab');
     const panel = document.getElementById('ztable-panel');
     const body = document.getElementById('ztable-body');
@@ -1402,5 +1402,10 @@ window.addEventListener('DOMContentLoaded', () => {
       panel.classList.toggle('hidden');
     });
     if (close) close.addEventListener('click', () => panel.classList.add('hidden'));
-  });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', wireZTable);
+  } else {
+    wireZTable(); // DOM already parsed — wire immediately
+  }
 })();
