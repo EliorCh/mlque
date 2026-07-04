@@ -1122,6 +1122,15 @@ function renderRich(text) {
       return `<span class="output-lines" dir="ltr">${esc}</span>`;
     }
   }
+  // Single-line, Hebrew-free code/output expression (tuple lists, dict/set
+  // literals, arrays): wrap the WHOLE thing as one LTR unit so its internal
+  // order (e.g. d,c,a,b) reads left-to-right instead of being reordered by
+  // the surrounding RTL context. Without this, "[('d',4), ('b',2)]" gets its
+  // tuples visually reversed even though each tuple alone looks right.
+  if (!t.includes('\n') && !/[\u0590-\u05FF]/.test(t) && /[[\](){}]/.test(t) && t.trim().length > 0) {
+    const esc = t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return `<span class="ltr-expr" dir="ltr">${esc}</span>`;
+  }
   const parts = t.split('```');
   let html = '';
   for (let i = 0; i < parts.length; i++) {

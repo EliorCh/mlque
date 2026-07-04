@@ -465,3 +465,13 @@ body {
 .fs-print-btn { text-decoration:none; display:inline-block; }
 .fs-dl { background:#fff; color:var(--teal,#2a9d8f); border:1.5px solid var(--teal,#2a9d8f); }
 .fs-dl:hover { background:var(--teal,#2a9d8f); color:#fff; }
+
+/* Whole code/output expressions (tuple lists, arrays) as one LTR unit
+   so their internal order reads left-to-right in the RTL layout */
+.ltr-expr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  font-family: var(--font-mono, monospace);
+  text-align: left;
+}
