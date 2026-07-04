@@ -1009,6 +1009,32 @@ function showToast(msg) {
 // rather than at the right edge of the LTR run.
 function renderText(text) {
   if (!text) return '';
+
+  // Protect math comparison expressions like "P(x < 45)", "P(x > 85)",
+  // "a < b", "x >= 3" BEFORE escaping. The generic LTR-run splitter can't
+  // keep "&lt;" intact, so we swap these to a placeholder, then restore
+  // them wrapped in a whole-unit LTR span with proper < > entities.
+  const mathHolds = [];
+  const encodeIdx = n => String(n).replace(/[0-9]/g, d => 'אבגדהוזחטי'[+d]);
+  const decodeIdx = s => +s.replace(/[אבגדהוזחטי]/g, c => 'אבגדהוזחטי'.indexOf(c));
+  // Protect comparison expressions - single (P(x<45), count>1) AND chained
+  // (A > B > C) - before escaping. token, then one-or-more " <op> token".
+  const cmpToken = '[A-Za-z0-9_.()\\-]+';
+  const cmpRe = new RegExp(`${cmpToken}(?:\\s*[<>]=?\\s*${cmpToken})+(?:\\s*=\\s*[0-9.]+)?`, 'g');
+  text = text.replace(cmpRe, (m) => {
+    if (/[\u0590-\u05FF]/.test(m)) return m;
+    const esc = m.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    mathHolds.push(`<span class="ltr-expr" dir="ltr">${esc}</span>`);
+    return `\u05DE\u05DE${encodeIdx(mathHolds.length - 1)}\u05DE\u05DE`;
+  });
+  // Catch any remaining bare "op number/token" not adjacent to Hebrew, e.g.
+  // "count(item) > 1" where the left side was consumed, or standalone "> 1".
+  text = text.replace(/(?<![\u0590-\u05FF])[<>]=?\s*[A-Za-z0-9_.()\-]+/g, (m) => {
+    const esc = m.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    mathHolds.push(`<span class="ltr-expr" dir="ltr">${esc}</span>`);
+    return `\u05DE\u05DE${encodeIdx(mathHolds.length - 1)}\u05DE\u05DE`;
+  });
+
   // escape HTML
   text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -1098,6 +1124,9 @@ function renderText(text) {
 
   // line breaks
   text = text.replace(/\n/g, '<br>');
+
+  // restore protected math-comparison expressions
+  text = text.replace(/\u05DE\u05DE([אבגדהוזחטי]+)\u05DE\u05DE/g, (_, s) => mathHolds[decodeIdx(s)]);
   return text;
 }
 
@@ -1334,3 +1363,44 @@ document.addEventListener('click', (e) => {
 window.addEventListener('DOMContentLoaded', () => {
   renderHome();
 });
+
+// ============================================================
+// Floating Z-table (standard normal CDF) for stats/inference practice
+// ============================================================
+(function initZTable() {
+  function phi(z) { // standard normal CDF via erf approximation
+    const t = 1 / (1 + 0.2316419 * Math.abs(z));
+    const d = 0.3989423 * Math.exp(-z * z / 2);
+    let p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+    p = 1 - p;
+    return z >= 0 ? p : 1 - p;
+  }
+  function buildTable() {
+    let html = '<tr><th>z</th>';
+    for (let c = 0; c < 10; c++) html += `<th>.0${c}</th>`;
+    html += '</tr>';
+    for (let r = 0; r <= 30; r++) {
+      const zRow = r / 10;
+      html += `<tr><th>${zRow.toFixed(1)}</th>`;
+      for (let c = 0; c < 10; c++) {
+        const z = zRow + c / 100;
+        html += `<td>${phi(z).toFixed(4)}</td>`;
+      }
+      html += '</tr>';
+    }
+    return html;
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const fab = document.getElementById('ztable-fab');
+    const panel = document.getElementById('ztable-panel');
+    const body = document.getElementById('ztable-body');
+    const close = document.getElementById('ztable-close');
+    if (!fab || !panel || !body) return;
+    let built = false;
+    fab.addEventListener('click', () => {
+      if (!built) { body.innerHTML = buildTable(); built = true; }
+      panel.classList.toggle('hidden');
+    });
+    if (close) close.addEventListener('click', () => panel.classList.add('hidden'));
+  });
+})();

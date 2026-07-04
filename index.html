@@ -242,6 +242,18 @@
   <iframe id="fs-frame" src="formula-sheet.html" title="דף נוסחאות"></iframe>
 </div>
 
+<!-- Floating Z-table (lookup during stats/inference practice) -->
+<button id="ztable-fab" class="ztable-fab" title="טבלת Z">Z</button>
+<div id="ztable-panel" class="ztable-panel hidden">
+  <div class="ztable-head">
+    <span>טבלת Z (התפלגות נורמלית סטנדרטית)</span>
+    <button id="ztable-close" class="ztable-close">✕</button>
+  </div>
+  <p class="ztable-note">מצאו את z שחישבתם, וקִראו את Φ(z) = השטח משמאל. ל"גדול מ־": 1 − Φ(z).</p>
+  <table class="ztable-full" id="ztable-body"></table>
+  <p class="ztable-note">ערכים נפוצים: Z(0.90)=1.28 · Z(0.95)=1.65 · Z(0.975)=1.96 · Z(0.995)=2.58</p>
+</div>
+
 <!-- Toast notifications -->
 <div id="toast" class="toast hidden"></div>
 
