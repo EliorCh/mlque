@@ -486,6 +486,16 @@ body {
   display: flex; align-items: center; justify-content: center;
 }
 .ztable-fab::after { content: ''; }
+
+.formula-fab {
+  position: fixed; bottom: 24px; right: 100px; left: auto; z-index: 200;
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--purple, #7c6fb0); color: #fff;
+  font-size: 26px; text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,.28);
+  display: flex; align-items: center; justify-content: center;
+}
+.formula-fab:hover { filter: brightness(1.08); }
 .ztable-fab:hover { filter: brightness(1.08); }
 .ztable-panel {
   position: fixed; bottom: 100px; right: 24px; left: auto; z-index: 200;
