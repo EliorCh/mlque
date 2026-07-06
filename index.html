@@ -48,17 +48,17 @@
 
       <button class="mode-card mode-practice" data-action="open-practice">
         <div class="mode-icon">◉</div>
-        <h3>תרגול לפי נושא</h3>
-        <p>סינון לפי נושא ספציפי — מפייתון ועד אשכולות. בלי לחץ זמן, עם הסברים מפורטים אחרי כל שאלה.</p>
-        <span class="mode-cta">לבחור נושא ←</span>
+        <h3>מאגר ותרגול לפי נושא</h3>
+        <p>כל השאלות במקום אחד — סננו לפי נושא בראש העמוד, ערבבו את הסדר, וענו עם הסבר מפורט אחרי כל שאלה.</p>
+        <span class="mode-cta">לתרגל ולסנן ←</span>
       </button>
 
-      <button class="mode-card mode-browse" data-action="open-browse">
-        <div class="mode-icon">≡</div>
-        <h3>גלישה במאגר</h3>
-        <p>צפייה בכל השאלות במאגר, מסודרות לפי מבחן ונושא. שימושי לחזרה לפני המבחן.</p>
-        <span class="mode-cta">לסקור שאלות ←</span>
-      </button>
+      <a class="mode-card mode-summary" href="https://eliorch.github.io/mlsum" target="_blank">
+        <div class="mode-icon">📖</div>
+        <h3>אתר הסיכום</h3>
+        <p>סיכום החומר המלא של הקורס — הסברים, נוסחאות ודוגמאות מפורטות. נפתח באתר נפרד.</p>
+        <span class="mode-cta">לאתר הסיכום ↗</span>
+      </a>
 
       <button class="mode-card mode-practice" data-action="open-open">
         <div class="mode-icon">✎</div>
@@ -188,12 +188,12 @@
 <div id="view-practice" class="view view-practice hidden">
   <div class="practice-header">
     <button class="btn-back" data-action="back-home">→ חזרה לדף הבית</button>
-    <h1 class="practice-title">תרגול לפי נושא</h1>
+    <h1 class="practice-title">מאגר ותרגול לפי נושא</h1>
   </div>
 
   <div class="practice-filters">
     <div class="filter-group">
-      <span class="filter-label">סנן לפי שכבה:</span>
+      <span class="filter-label">סנן לפי נושא:</span>
       <div class="filter-chips" id="topic-filters"></div>
     </div>
     <div class="filter-summary" id="filter-summary"></div>

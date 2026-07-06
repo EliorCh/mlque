@@ -619,6 +619,7 @@ const Exam = {
 
 const Practice = {
   filters: { topics: new Set() },
+  shuffled: false,
 
   show() {
     showView('practice');
@@ -635,9 +636,12 @@ const Practice = {
               style="--chip-color: ${TOPIC_COLORS[topic]}">
         ${TOPIC_NAMES[topic]}
       </button>
-    `).join('');
+    `).join('') + `
+      <button class="filter-chip shuffle-chip ${this.shuffled ? 'active' : ''}" data-shuffle="1">
+        🔀 ${this.shuffled ? 'מעורבב' : 'ערבב סדר'}
+      </button>`;
 
-    container.querySelectorAll('.filter-chip').forEach(chip => {
+    container.querySelectorAll('.filter-chip[data-topic]').forEach(chip => {
       chip.addEventListener('click', () => {
         const topic = chip.dataset.topic;
         if (this.filters.topics.has(topic)) this.filters.topics.delete(topic);
@@ -646,11 +650,21 @@ const Practice = {
         this.renderQuestions();
       });
     });
+
+    const shuffleBtn = container.querySelector('[data-shuffle]');
+    if (shuffleBtn) shuffleBtn.addEventListener('click', () => {
+      this.shuffled = !this.shuffled;
+      this.renderFilters();
+      this.renderQuestions();
+    });
   },
 
   getFiltered() {
-    if (this.filters.topics.size === 0) return QUESTIONS;
-    return QUESTIONS.filter(q => this.filters.topics.has(q.topic));
+    let qs = this.filters.topics.size === 0
+      ? QUESTIONS
+      : QUESTIONS.filter(q => this.filters.topics.has(q.topic));
+    if (this.shuffled) qs = shuffle([...qs]);
+    return qs;
   },
 
   renderQuestions() {
@@ -1226,6 +1240,7 @@ function renderHome() {
   const statsEl = document.getElementById('hero-stats');
 
   let bestScore = state.history.length > 0 ? Math.max(...state.history.map(h => h.score)) : null;
+  let avgScore = state.history.length > 0 ? Math.round(state.history.reduce((s, h) => s + h.score, 0) / state.history.length) : null;
   let attempts = state.history.length;
   let marked = state.marked.length;
 
@@ -1241,6 +1256,10 @@ function renderHome() {
     <div class="hero-stat">
       <div class="hero-stat-value">${bestScore !== null ? bestScore : '–'}</div>
       <div class="hero-stat-label">הציון הגבוה</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">${avgScore !== null ? avgScore : '–'}</div>
+      <div class="hero-stat-label">ציון ממוצע</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-value">${marked}</div>
@@ -1295,14 +1314,22 @@ function renderWeakSection(state) {
     <div class="weak-section-subtitle">לפי הביצועים שלך במבחנים האחרונים — דיוק מתחת ל־<span class="ltr">70%</span></div>
     <div class="weak-list">
       ${weak.map(r => `
-        <div class="weak-item">
-          <div class="weak-item-topic">${TOPIC_NAMES[r.topic] || r.topic}</div>
+        <button class="weak-item weak-item-btn" data-weak-topic="${r.topic}">
+          <div class="weak-item-topic">${TOPIC_NAMES[r.topic] || r.topic} <span class="weak-item-cta">תרגל ←</span></div>
           <div class="weak-item-stat"><span class="ltr">${r.pct}%</span> דיוק · <span class="ltr">${r.stat}</span></div>
           <div class="weak-item-bar"><div class="weak-item-bar-fill" style="width: ${r.pct}%"></div></div>
-        </div>
+        </button>
       `).join('')}
     </div>
   `;
+
+  container.querySelectorAll('[data-weak-topic]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const topic = btn.dataset.weakTopic;
+      Practice.filters.topics = new Set([topic]);
+      Practice.show();
+    });
+  });
 }
 
 // ============================================================
@@ -1328,10 +1355,8 @@ document.addEventListener('click', (e) => {
       Exam.exit();
       break;
     case 'open-practice':
-      Practice.show();
-      break;
     case 'open-browse':
-      Browse.show();
+      Practice.show();
       break;
     case 'open-marked':
       Marked.show();
