@@ -520,9 +520,13 @@ body {
 .mode-summary { text-decoration: none; }
 .mode-summary .mode-icon { color: #b06a3a; }
 
-/* Shuffle chip in filters */
-.shuffle-chip { --chip-color: #7c6fb0; border-style: dashed; }
-.shuffle-chip.active { background: #7c6fb0; color: #fff; border-color: #7c6fb0; }
+/* Summary row with shuffle button (matches comque reference) */
+.filter-summary-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+.shuffle-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border: 1.5px solid var(--teal-soft); background: var(--teal-bg); color: var(--teal-text); border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.shuffle-btn:hover { background: var(--teal); color: #fff; border-color: var(--teal); }
+.shuffle-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+.shuffle-btn .shuffle-icon { font-size: 15px; line-height: 1; }
+.shuffle-btn:active .shuffle-icon { transform: rotate(180deg); transition: transform 0.2s; }
 
 /* Clickable weak-topic items */
 .weak-item-btn { width: 100%; text-align: right; border: none; cursor: pointer; font-family: inherit; background: var(--card, #fff); transition: transform .1s; }

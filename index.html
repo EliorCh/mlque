@@ -53,12 +53,12 @@
         <span class="mode-cta">לתרגל ולסנן ←</span>
       </button>
 
-      <a class="mode-card mode-summary" href="https://eliorch.github.io/mlsum" target="_blank">
-        <div class="mode-icon">📖</div>
-        <h3>אתר הסיכום</h3>
-        <p>סיכום החומר המלא של הקורס — הסברים, נוסחאות ודוגמאות מפורטות. נפתח באתר נפרד.</p>
-        <span class="mode-cta">לאתר הסיכום ↗</span>
-      </a>
+      <button class="mode-card mode-marked" data-action="open-marked">
+        <div class="mode-icon">★</div>
+        <h3>שאלות מסומנות</h3>
+        <p>שאלות שסימנתם לחזרה ושאלות שטעיתם בהן במבחנים קודמים.</p>
+        <span class="mode-cta">לראות מסומנות ←</span>
+      </button>
 
       <button class="mode-card mode-practice" data-action="open-open">
         <div class="mode-icon">✎</div>
@@ -74,12 +74,12 @@
         <span class="mode-cta">לצפייה והדפסה ←</span>
       </button>
 
-      <button class="mode-card mode-marked" data-action="open-marked">
-        <div class="mode-icon">★</div>
-        <h3>שאלות מסומנות</h3>
-        <p>שאלות שסימנתם לחזרה ושאלות שטעיתם בהן במבחנים קודמים.</p>
-        <span class="mode-cta">לראות מסומנות ←</span>
-      </button>
+      <a class="mode-card mode-summary" href="https://eliorch.github.io/mlsum" target="_blank">
+        <div class="mode-icon">📖</div>
+        <h3>אתר הסיכום</h3>
+        <p>סיכום החומר המלא של הקורס — הסברים, נוסחאות ודוגמאות מפורטות. נפתח באתר נפרד.</p>
+        <span class="mode-cta">לאתר הסיכום ↗</span>
+      </a>
     </div>
   </section>
 
@@ -196,7 +196,12 @@
       <span class="filter-label">סנן לפי נושא:</span>
       <div class="filter-chips" id="topic-filters"></div>
     </div>
-    <div class="filter-summary" id="filter-summary"></div>
+    <div class="filter-summary-row">
+      <div class="filter-summary" id="filter-summary"></div>
+      <button class="shuffle-btn" id="shuffle-btn">
+        <span class="shuffle-icon">⇄</span> ערבב שאלות
+      </button>
+    </div>
   </div>
 
   <div class="practice-questions" id="practice-questions"></div>

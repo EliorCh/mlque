@@ -620,10 +620,12 @@ const Exam = {
 const Practice = {
   filters: { topics: new Set() },
   shuffled: false,
+  order: null,
 
   show() {
     showView('practice');
     this.renderFilters();
+    this.bindShuffle();
     this.renderQuestions();
   },
 
@@ -636,35 +638,51 @@ const Practice = {
               style="--chip-color: ${TOPIC_COLORS[topic]}">
         ${TOPIC_NAMES[topic]}
       </button>
-    `).join('') + `
-      <button class="filter-chip shuffle-chip ${this.shuffled ? 'active' : ''}" data-shuffle="1">
-        🔀 ${this.shuffled ? 'מעורבב' : 'ערבב סדר'}
-      </button>`;
+    `).join('');
 
     container.querySelectorAll('.filter-chip[data-topic]').forEach(chip => {
       chip.addEventListener('click', () => {
         const topic = chip.dataset.topic;
         if (this.filters.topics.has(topic)) this.filters.topics.delete(topic);
         else this.filters.topics.add(topic);
+        // Changing the filter invalidates the shuffled order; reset to bank order.
+        this.shuffled = false;
+        this.order = null;
+        const sb = document.getElementById('shuffle-btn');
+        if (sb) sb.classList.remove('active');
         this.renderFilters();
         this.renderQuestions();
       });
     });
+  },
 
-    const shuffleBtn = container.querySelector('[data-shuffle]');
-    if (shuffleBtn) shuffleBtn.addEventListener('click', () => {
-      this.shuffled = !this.shuffled;
-      this.renderFilters();
+  bindShuffle() {
+    const btn = document.getElementById('shuffle-btn');
+    if (!btn || btn.dataset.bound) return;
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', () => {
+      // Each click re-shuffles the currently filtered set into a new fixed order.
+      this.shuffled = true;
+      this.order = shuffle(this.getFiltered().map(q => q.id));
+      btn.classList.add('active');
       this.renderQuestions();
+      showToast('השאלות עורבבו');
     });
   },
 
   getFiltered() {
-    let qs = this.filters.topics.size === 0
+    let list = this.filters.topics.size === 0
       ? QUESTIONS
       : QUESTIONS.filter(q => this.filters.topics.has(q.topic));
-    if (this.shuffled) qs = shuffle([...qs]);
-    return qs;
+    // If a shuffled order is active, reorder the filtered list to match the
+    // FIXED order captured on shuffle — so answering a question (which
+    // re-renders) doesn't reshuffle and make the list jump around.
+    if (this.shuffled && this.order) {
+      const pos = {};
+      this.order.forEach((id, i) => { pos[id] = i; });
+      list = [...list].sort((a, b) => (pos[a.id] ?? 0) - (pos[b.id] ?? 0));
+    }
+    return list;
   },
 
   renderQuestions() {
